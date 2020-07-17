@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Pweet | Home{% endblock %}
+{% load filter %}
+{% block body %}
+{% block js %}<script src="{% static 'js/main.js' %}"></script>{% endblock %}
+
+<div class='row mb-3'>
+    <div class='col-md-4 mx-auto col-10 container'>
+        <form class='form' method='POST' action="{% url 'tweets:create' %}" enctype="multipart/form-data" id="tweet-create-form">
+            {% csrf_token %}
+{#        <div class="container">#}
+{#            <label>You Tweet here#}
+
+                <textarea required='required' class='form-control' name='content' placeholder='Your tweet...'></textarea>
+{#            </label>#}
+{#        </div>#}
+            <div class="file-upload-wrapper">
+                <input type="file"  accept="image/*" name="img" id="file"  onchange="loadFile(event)" style="display: none;">
+                <label for="file" style="cursor: pointer;">Upload Image</label>
+                <img id="output" width="200" disabled="disabled" class="hidden"/>
+                <div id="image-reset"></div>
+              </div>
+
+            {% if user.is_authenticated %}
+                <button type='submit' class='btn btn-primary'>Tweet</button>
+            {% else %}
+                <a href="{% url 'accounts:login' %}"><button type="button" class="btn btn-primary">Login</button></a>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+    <div id="tweets-here">Loading....</div>
+
+
+
+<script>
+        var wrapper = document.getElementById("tweets-here")
+</script>
+
+{% endblock %}
