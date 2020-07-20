@@ -1,8 +1,7 @@
 
 var userDetails;
-
-stack();
 async function stack(){
+    console.log('stack')
     await get_user()
     await load_tweets();
 }
