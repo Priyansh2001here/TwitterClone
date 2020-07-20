@@ -5,7 +5,7 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer, ProfileSerializer
+from .serializers import UserSerializer, ProfileSerializer, LoginSerializer
 from rest_framework.response import Response
 from .forms import ProfileCreate
 
@@ -81,3 +81,18 @@ def profile_view(request, pk, *args, **kwargs):
     user_obj = get_object_or_404(User, id=pk)
     profile_obj = get_object_or_404(Profile, usr=user_obj)
     return Response(ProfileSerializer(profile_obj).data)
+
+
+@api_view(['POST'])
+def login_api(request):
+    print(request.data)
+    serialized = LoginSerializer(data=request.data)
+    if serialized.is_valid():
+        print('valid')
+        print(serialized.data)
+        user = auth.authenticate(request, username=serialized.data.get('username'), password=serialized.data.get('pswd'))
+        if not user:
+            return Response(status=401)
+        auth.login(request, user)
+        return Response(status=200)
+    return Response(status=400)

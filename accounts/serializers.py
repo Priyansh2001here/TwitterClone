@@ -47,3 +47,9 @@ class ProfileSerializer(ModelSerializer):
         usr = obj.usr
         all_tweets = usr.tweet_set.all()
         return TweetSerializer(all_tweets, many=True).data
+
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    pswd = serializers.CharField()

@@ -13,11 +13,21 @@
         crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
         crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 {#    {% block js %}{% endblock %}#}
     {% block custom_css %}{% endblock custom_css %}
     {% block js %} {% endblock %}
 
 </head>
+
+<script>
+        $(window).on('load',function(){
+        $('#modalLRForm').modal('show');
+    });
+</script>
+
+
 
 <body>
 
@@ -57,7 +67,7 @@
           <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
 
             <!--Body-->
-              <form action="{% url 'accounts:login' %}" method="post">
+              <form action="{% url 'accounts:login' %}" method="post" id="login-form">
                   {% csrf_token %}
             <div class="modal-body mb-1">
               <div class="md-form form-sm mb-5">
@@ -77,10 +87,6 @@
             </div>
             <!--Footer-->
             <div class="modal-footer">
-              <div class="options text-center text-md-right mt-1">
-                <p>Not a member? <a href="#" class="blue-text">Sign Up</a></p>
-                <p>Forgot <a href="#" class="blue-text">Password?</a></p>
-              </div>
               <button type="submit" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
             </div>
               </form>
@@ -142,14 +148,7 @@
 
               <div class="md-form form-sm mb-4">
 {#                <i class="fas fa-lock prefix"></i>#}
-                <textarea type="text" id="modalLRInput14" class="form-control form-control-sm validate" placeholder="Bio(optional)" name="bio">Bio
-                    </textarea>
-                              <div class="file-upload-wrapper">
-                <input type="file"  accept="image/*" name="prof_img" id="file"  onchange="loadFile(event)" style="display: none;">
-                <label for="file" style="cursor: pointer;">Upload Image</label>
-                <img id="output" width="200" disabled="disabled" class="hidden"/>
-                <div id="image-reset"></div>
-              </div>
+                <textarea type="text" id="modalLRInput14" class="form-control form-control-sm validate" placeholder="Bio(optional)" name="bio">Bio</textarea>
               </div>
 
               <div class="text-center form-sm mt-2">
@@ -256,8 +255,6 @@
 
 
     <!-- All javascript files goes under here    -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"

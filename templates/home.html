@@ -3,7 +3,10 @@
 {% block title %}Pweet | Home{% endblock %}
 {% load filter %}
 {% block body %}
-{% block js %}<script src="{% static 'js/main.js' %}"></script>{% endblock %}
+{% block js %}
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/login.js' %}"></script>
+{% endblock %}
 
 <div class='row mb-3'>
     <div class='col-md-4 mx-auto col-10 container'>
@@ -37,6 +40,9 @@
 
 <script>
         var wrapper = document.getElementById("tweets-here")
+        var login_form = document.getElementById('login-form')
+login_form.addEventListener('submit', login_form_submit)
+
 </script>
 
 {% endblock %}

@@ -9,4 +9,5 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('usrinfo', views.userinf),
     path('api/profile/<int:pk>', views.profile_view),
+    path('login_api', views.login_api)
 ]
