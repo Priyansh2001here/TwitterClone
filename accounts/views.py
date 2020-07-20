@@ -5,45 +5,47 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer, ProfileSerializer, LoginSerializer
+from .serializers import UserSerializer, ProfileSerializer, LoginSerializer, UserCreateSerializer
 from rest_framework.response import Response
 from .forms import ProfileCreate
 
+from rest_framework import status
 
-def register(request, *args, **kwargs):
-    print("\ncalled register\n")
-    if request.user.is_authenticated:
-        return redirect("/")
-    if request.method == "POST":
-        print("\n", request.POST,"\n")
-        print("\n", request.FILES,"\n")
-
-        email = request.POST.get('email')
-        username = request.POST.get('username')
-        pswd1 = request.POST.get('password1')
-        pswd2 = request.POST.get('password2')
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        if pswd1 != pswd2:
-            print("\npswd != \n")
-            return HttpResponse("try again")
-        user = User.objects.filter(email__iexact=email).first()
-        user2 = User.objects.filter(username__iexact=username).first()
-        if user2 or user:
-            messages.error(request, "user with this email or username exixts")
-            return redirect("accounts:register")
-        else:
-            print("\n creating \n")
-            user = User.objects.create_user(first_name=first_name, last_name=last_name, email=email,
-                                            password=pswd1, username=username)
-            user.save()
-            prof = ProfileCreate(request.POST, request.FILES)
-            if prof.is_valid:
-                obj = prof.save(commit=False)
-                obj.usr = user
-                obj.save()
-            return redirect("/")
-    return render(request, "accounts/register.html")
+#
+# def register(request, *args, **kwargs):
+#     print("\ncalled register\n")
+#     if request.user.is_authenticated:
+#         return redirect("/")
+#     if request.method == "POST":
+#         print("\n", request.POST, "\n")
+#         print("\n", request.FILES, "\n")
+#
+#         email = request.POST.get('email')
+#         username = request.POST.get('username')
+#         pswd1 = request.POST.get('password1')
+#         pswd2 = request.POST.get('password2')
+#         first_name = request.POST['first_name']
+#         last_name = request.POST['last_name']
+#         if pswd1 != pswd2:
+#             print("\npswd != \n")
+#             return HttpResponse("try again")
+#         user = User.objects.filter(email__iexact=email).first()
+#         user2 = User.objects.filter(username__iexact=username).first()
+#         if user2 or user:
+#             messages.error(request, "user with this email or username exixts")
+#             return redirect("accounts:register")
+#         else:
+#             print("\n creating \n")
+#             user = User.objects.create_user(first_name=first_name, last_name=last_name, email=email,
+#                                             password=pswd1, username=username)
+#             user.save()
+#             prof = ProfileCreate(request.POST, request.FILES)
+#             if prof.is_valid:
+#                 obj = prof.save(commit=False)
+#                 obj.usr = user
+#                 obj.save()
+#             return redirect("/")
+#     return render(request, "accounts/register.html")
 
 
 def login(request, *args, **kwargs):
@@ -90,9 +92,45 @@ def login_api(request):
     if serialized.is_valid():
         print('valid')
         print(serialized.data)
-        user = auth.authenticate(request, username=serialized.data.get('username'), password=serialized.data.get('pswd'))
+        user = auth.authenticate(request, username=serialized.data.get('username'),
+                                 password=serialized.data.get('pswd'))
         if not user:
             return Response(status=401)
         auth.login(request, user)
         return Response(status=200)
     return Response(status=400)
+
+
+@api_view(['POST'])
+def user_regis_api(request):
+    print('data ->  ', request.data)
+    serialized = UserCreateSerializer(data=request.data)
+    if serialized.is_valid():
+        print("\nvalid\n")
+        print(serialized.data)
+
+        email = request.data.get('email')
+        username = request.data.get('username')
+        password1 = request.data.get('password1')
+        password2 = request.data.get('password2')
+
+        user = User.objects.filter(email__iexact=email).first()
+        user2 = User.objects.filter(username__iexact=username).first()
+
+        if user2 or user:
+            return Response({'message': 'user already exists'}, status=409)
+        if password1 != password2:
+            return Response({'message': 'paswords donot match'}, status=409)
+
+        usr = User.objects.create_user(username=username,
+                                       email=email,
+                                       password=password2,
+                                       first_name=request.data.get('first_name'),
+                                       last_name=request.data.get('last_name')
+                                       )
+
+        usr.save()
+        auth.login(request, usr)
+        return Response(status=200)
+
+    print("\ninvalid\n")

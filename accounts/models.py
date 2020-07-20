@@ -18,7 +18,8 @@ class Profile(models.Model):
     def __str__(self):
         return self.usr.username
 
-# post_save.connect(auto_prof_create, sender=User)
+
+post_save.connect(auto_prof_create, sender=User)
 
 '''
 <django.db.models.fields.related_descriptors.create_forward_many_to_many_manager.<locals>.ManyRelatedManager object at 0x0000018B69855908>

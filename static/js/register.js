@@ -1,6 +1,25 @@
 
 
-async function register_form_submit(event) {}
+async function register_form_submit(event) {
+    event.preventDefault()
+    var formElement = event.target
+    const myFormData = Object.values(event.target).reduce((obj, field) => { obj[field.name] = field.value; return obj }, {})
+
+    const options = {
+        method: 'POST',
+        headers:{
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie('csrftoken')
+        },
+        body: JSON.stringify(
+            myFormData
+        )
+    }
+    let resp = await fetch('/accounts/usr_regis_api', options)
+    console.log(resp)
+    console.log(resp.status)
+    console.log(resp.message)
+}
 
 
 
