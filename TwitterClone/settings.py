@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'tweets.apps.TweetsConfig',
     'rest_framework.apps.RestFrameworkConfig',
+    'crispy_forms'
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -79,8 +82,11 @@ WSGI_APPLICATION = 'TwitterClone.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Pweet',
+        'USER': 'postgres',
+        'HOST': 'localhost',
+        'PASSWORD': '2315211'
     }
 }
 

@@ -26,7 +26,7 @@ class ProfileSerializer(ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ['bio', 'prof_img', 'followers', 'prof_user', 'following', 'all_tweets']
+        fields = ['bio', 'prof_img', 'banner_img', 'followers', 'prof_user', 'following', 'all_tweets']
 
     def get_followers(self, obj: Profile):
         all_followers = obj.follower.all()
@@ -61,13 +61,8 @@ class UserCreateSerializer(serializers.Serializer):
     password1 = serializers.CharField()
     password2 = serializers.CharField()
 
-    # def validated_data(self):
-    #     if self.password1 != self.password2:
-    #         return False
-    #     return True
 
-
-# class UserCreateSerializer(ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['first_name', 'last_name', 'email', 'username', 'password']
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'prof_img', 'banner_img']

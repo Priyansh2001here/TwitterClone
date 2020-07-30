@@ -23,22 +23,15 @@
 
 <script>
     {% if not user.is_authenticated %}
-    $(window).on('load',function(){
-        $('#modalLRForm').modal('show');
-    });
+        $(window).on('load',function(){
+            $('#modalLRForm').modal('show');
+        });
     {% endif %}
 </script>
 
 
 
 <body>
-
-
-
-
-
-
-
 
 
 
@@ -74,13 +67,13 @@
                             <div class="modal-body mb-1">
                                 <div class="md-form form-sm mb-5">
                                     <i class="fas fa-envelope prefix"></i>
-                                    <input type="text" id="modalLRInput10" class="form-control form-control-sm validate" name="username">
+                                    <input type="text" id="modalLRInput10" class="form-control form-control-sm validate" name="username" required>
                                     <label data-error="wrong" data-success="right" for="modalLRInput10">Username</label>
                                 </div>
 
                                 <div class="md-form form-sm mb-4">
                                     <i class="fas fa-lock prefix"></i>
-                                    <input type="password" id="modalLRInput11" class="form-control form-control-sm validate" name="pswd">
+                                    <input type="password" id="modalLRInput11" class="form-control form-control-sm validate" name="pswd" required>
                                     <label data-error="wrong" data-success="right" for="modalLRInput11">Your password</label>
                                 </div>
                                 <div class="text-center mt-2">
@@ -104,46 +97,43 @@
 
 
 
-
-
-
-                            <form method="post" action="{% url 'accounts:register' %}" enctype="multipart/form-data" id="regis-form">
+                            <form method="post" id="regis-form">
                                 {% csrf_token %}
                                 <div class="modal-body">
                                     <div class="form-row mb-4">
                                         <div class="md-form form-sm mb-4 col">
                                             <i class="fas fa-lock prefix"></i>
-                                            <input type="text" class="form-control form-control-sm validate" name="first_name">
+                                            <input type="text" class="form-control form-control-sm validate" name="first_name" required>
                                             <label data-error="wrong" data-success="right" for="modalLRInput14">First Name</label>
                                         </div>
 
                                         <div class="md-form form-sm mb-4 col">
                                             <i class="fas fa-lock prefix"></i>
-                                            <input type="text" class="form-control form-control-sm validate" name="last_name">
+                                            <input type="text" class="form-control form-control-sm validate" name="last_name" required>
                                             <label data-error="wrong" data-success="right" for="modalLRInput14">Last Name</label>
                                         </div>
                                     </div>
                                     <div class="md-form form-sm mb-5">
                                         <i class="fas fa-envelope prefix"></i>
-                                        <input type="email" class="form-control form-control-sm validate" name="email">
+                                        <input type="email" class="form-control form-control-sm validate" name="email" required>
                                         <label data-error="wrong" data-success="right" for="modalLRInput12">Your email</label>
                                     </div>
 
                                     <div class="md-form form-sm mb-4">
                                         <i class="fas fa-address-book prefix"></i>
-                                        <input type="text" class="form-control form-control-sm validate" name="username">
+                                        <input type="text" class="form-control form-control-sm validate" name="username" required>
                                         <label data-error="wrong" data-success="right" for="modalLRInput14">Username</label>
                                     </div>
 
                                     <div class="md-form form-sm mb-5">
                                         <i class="fas fa-lock prefix"></i>
-                                        <input type="password"  class="form-control form-control-sm validate" name="password1">
+                                        <input type="password"  class="form-control form-control-sm validate" name="password1" required>
                                         <label data-error="wrong" data-success="right" for="modalLRInput13">Your password</label>
                                     </div>
 
                                     <div class="md-form form-sm mb-4">
                                         <i class="fas fa-lock prefix"></i>
-                                        <input type="password" class="form-control form-control-sm validate" name="password2">
+                                        <input type="password" class="form-control form-control-sm validate" name="password2" required>
                                         <label data-error="wrong" data-success="right" for="modalLRInput14">Repeat password</label>
                                     </div>
 
@@ -154,13 +144,6 @@
 
                                 </div>
                             </form>
-
-
-
-
-
-
-
 
 
 
@@ -186,15 +169,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="/">Pweet</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -206,38 +180,25 @@
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'tweets:home' %}">Home<span class="sr-only">(current)</span></a>
             </li>
-            {#      <li class="nav-item">#}
-            {#        <a class="nav-link" href="#">Link</a>#}
-            {#      </li>#}
             {% if user.is_authenticated %}
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Account
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
-                    <a class="dropdown-item" href="#">Profile</a>
-                    {#          <div class="dropdown-divider"></div>#}
-                    {#          <a class="dropdown-item" href="#">Something else here</a>#}
-                </div>
-                {% else %}
-            <li class="nav-item">
-                {#        <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>#}
-                <a class="nav-link" href="" data-toggle="modal" data-target="#modalLRForm">Login</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'accounts:register' %}">Register</a>
-            </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Account
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+                        <a class="dropdown-item" href="#">Profile</a>
+                    </div>
+                    {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="" data-toggle="modal" data-target="#modalLRForm">Login/Register</a>
+                </li>
             {% endif %}
-            {#      </li>#}
-            {#      <li class="nav-item">#}
-            {#        <a class="nav-link disabled" href="#">Disabled</a>#}
-        </li>
         </ul>
         {% if user.is_authenticated %}
-        <div style="margin-right: 2%">
-            Hello {{ user.username }}
-        </div>
+            <div style="margin-right: 2%">
+                Hello {{ user.username }}
+            </div>
         {% endif %}
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

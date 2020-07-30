@@ -6,4 +6,13 @@ class ProfileCreate(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['bio', 'prof_img']
+        exclude = ['usr', 'follower']
+
+        # widgets = {
+        #     'bio': forms.Textarea(
+        #         attrs={
+        #             'class': 'form-control'
+        #         }
+        #     ),
+        #
+        # }
