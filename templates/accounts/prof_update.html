@@ -1,19 +1,35 @@
 {% extends 'base.html' %}
 {% block body %}
     <div id="form-here">
-        <form id="my-frm" class="form form-control">
-            <input type="file" accept="image/*" name="prof_img" id="prof-img" onchange="load_av()" class="form-group">
-            <button type="button" id="remove-prof-img" style="display: none" onclick="rem_av()">Remove avatar</button>
-            <img src="" style="display: none" height="10%" width="10%" id="output-prof-img">
-
-
-            <input type="file" accept="image/*" name="banner_img" id="banner-img" class="form-group" onchange="load_banner()">
-            <button type="button" id="remove-banner-img" style="display: none" onclick="rem_ban()">Remove Banner</button>
-            <img src="" style="display: none" height="10%" width="10%" id="output-banner-img">
-
-
-            <textarea name="bio" id="usr-bio" class="form-group"></textarea>
-            <button type="submit">Save</button>
+        <form id="my-frm" class="form">
+            <div id="pics">
+                <div id="header-img">
+                    <img src="https://adhyatmik.in/wp-content/uploads/2019/02/Background-Header-1.jpg" id="output-banner-img">
+                </div>
+                <div id="prof-pic">
+                    <img src="https://www.w3schools.com/w3images/avatar2.png" id="output-prof-img">
+                </div>
+            </div>
+            <div class="change-butt container">
+                <input type="file" accept="image/*" name="prof_img" id="prof-img" onchange="load_av()" class="form-group inputfile">
+                <label for="prof-img">Change Avatar</label>
+                <input type="file" accept="image/*" name="banner_img" id="banner-img" class="form-group btn inputfile" onchange="load_banner()">
+                <label for="banner-img">Change Banner</label>
+            </div>
+            <div class="remov container">
+                <button type="button" class="remov-butt"  style="display: none;" id="remove-prof-img"  onclick="rem_av()">
+                    Remove avatar
+                </button>     
+                <button type="button" class="remov-butt" style="display: none;" id="remove-banner-img" onclick="rem_ban()">
+                    Remove Banner
+                </button>
+            </div>
+            
+            <div class="Bio container">
+                <label for="usr-bio">Bio</label>
+                <textarea name="bio" id="usr-bio" class="form-group form-control"></textarea>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
         </form>
 
     </div>
@@ -22,18 +38,16 @@
         var remove_banner = 0, remove_avatar = 0
 
         function rem_av() {
-            document.getElementById('output-prof-img').style.display = 'none'
             document.getElementById('remove-prof-img').style.display = 'none'
-            document.getElementById('output-prof-img').src = ""
+            document.getElementById('output-prof-img').src = "https://www.w3schools.com/w3images/avatar2.png"
             document.getElementById('prof-img').value = ""
             remove_avatar = 1
         }
 
         function rem_ban() {
             remove_banner = 1
-            document.getElementById('output-banner-img').style.display = 'none'
             document.getElementById('remove-banner-img').style.display = 'none'
-            document.getElementById('output-banner-img').src = ""
+            document.getElementById('output-banner-img').src = "https://adhyatmik.in/wp-content/uploads/2019/02/Background-Header-1.jpg"
             document.getElementById('banner-img').value = ""
         }
 
@@ -44,12 +58,12 @@
             document.getElementById('usr-bio').innerText = resp1.bio
 
             if (resp1.prof_img) {
-                document.getElementById('remove-prof-img').style.display = 'block'
+                document.getElementById('remove-prof-img').style.display = 'inline'
                 document.getElementById('output-prof-img').style.display = 'block'
                 document.getElementById('output-prof-img').src = resp1.prof_img
             }
             if (resp1.banner_img) {
-                document.getElementById('remove-banner-img').style.display = 'block'
+                document.getElementById('remove-banner-img').style.display = 'inline'
                 document.getElementById('output-banner-img').style.display = 'block'
                 document.getElementById('output-banner-img').src = resp1.banner_img
             }
@@ -60,14 +74,14 @@
             var prof_img = document.getElementById('prof-img').files[0]
             document.getElementById('output-prof-img').src = URL.createObjectURL(prof_img)
             document.getElementById('output-prof-img').style.display = 'block'
-            document.getElementById('remove-prof-img').style.display = 'block'
+            document.getElementById('remove-prof-img').style.display = 'inline'
         }
 
         function load_banner() {
             var banner_img = document.getElementById('banner-img').files[0]
             document.getElementById('output-banner-img').src = URL.createObjectURL(banner_img)
             document.getElementById('output-banner-img').style.display = 'block'
-            document.getElementById('remove-banner-img').style.display = 'block'
+            document.getElementById('remove-banner-img').style.display = 'inline'
         }
 
         getDetails()
@@ -126,7 +140,5 @@
             }
             return cookieValue;
         }
-
-
     </script>
 {% endblock %}
