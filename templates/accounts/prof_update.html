@@ -14,28 +14,27 @@
                     <img src="https://www.w3schools.com/w3images/avatar2.png" id="output-prof-img">
                 </div>
             </div>
+
             <div class="change-butt container">
-                <input type="file" accept="image/*" name="prof_img" id="prof-img" onchange="load_av()" class="form-group inputfile">
-                <label for="prof-img">Change Avatar</label>
-                <input type="file" accept="image/*" name="banner_img" id="banner-img" class="form-group btn inputfile" onchange="load_banner()">
-                <label for="banner-img">Change Banner</label>
+                <input type="file" accept="image/*" name="prof_img" id="prof-img" onchange="load_av()" class="form-group" hidden>
+                <label for="prof-img" class=" btn btn-primary btn-sm">Change Avatar</label>
+                <input type="file" accept="image/*" name="banner_img" id="banner-img" class="form-group" onchange="load_banner()" hidden>
+                <label for="banner-img" class=" btn btn-primary btn-sm">Change Banner</label>
             </div>
             <div class="remov container">
-                <button type="button" class="remov-butt"  style="display: none;" id="remove-prof-img"  onclick="rem_av()">
+                <button type="button" class="btn btn-primary btn-sm" style="display: none;" id="remove-prof-img"  onclick="rem_av()">
                     Remove avatar
                 </button>     
-                <button type="button" class="remov-butt" style="display: none;" id="remove-banner-img" onclick="rem_ban()">
+                <button type="button" class="btn btn-primary btn-sm" style="display: none;" id="remove-banner-img" onclick="rem_ban()">
                     Remove Banner
                 </button>
             </div>
-            
             <div class="Bio container">
                 <label for="usr-bio">Bio</label>
                 <textarea name="bio" id="usr-bio" class="form-group form-control"></textarea>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-success">Save</button>
             </div>
         </form>
-
     </div>
     <script src="{% static 'js/update_profile.js' %}"></script>
 {% endblock %}
