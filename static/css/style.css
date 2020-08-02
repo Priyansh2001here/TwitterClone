@@ -4,7 +4,6 @@
     margin-left: auto;
     margin-right: auto;
     width: 100vmin;
-    /* height: 16.67vmin; */
 }
 #prof-pic
 {
@@ -27,64 +26,17 @@
 }
 
 .change-butt {
-    margin-top: 10vmin;
-    padding-left: 35%;
+    margin-top: 2vmin;
+    padding-left: 40vmin;
 }
 
 .container {
     max-width: 100vmin;
 }
-.inputfile {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
-}
-
-.inputfile + label {
-    max-width: 50%;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    cursor: pointer;
-    display: inline-block;
-    overflow: hidden;
-    padding: 0.5rem 1rem;
-}
-
-.inputfile + label {
-    color: #f1e5e6;
-    background-color: blue;
-}
-.inputfile + label:hover {
-    background-color: #121474;
-}
-
-.remov-butt {
-    display: flex;
-    flex-flow: row wrap;
-    max-width: 50%;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    cursor: pointer;
-    display: inline-block;
-    overflow: hidden;
-    padding: 0.4rem 0.8rem;
-    color: #f1e5e6;
-    background-color: #0000ff;
-}
-
-.remov-butt:hover {
-    background-color: #121474;
-}
-
 .remov {
-    padding-left: 35%;
+    padding-left: 40vmin;
 }
 
-
+.btn-primary {
+    width: 25vmin;
+}
