@@ -51,7 +51,7 @@ function getRetweetElm(obj) {
 
     retweetElm = `
                 <div class='container'>
-                    <div class='col-8 col-md-8 mx-auto border rounded py-3 mb-4'>
+                    <div class='col-md-8 col-sm-12 mx-auto border rounded py-3 mb-4'>
                         <div>
                             <small>${obj.parent_serialized.owner_name}</small>
                         </div>
@@ -202,7 +202,7 @@ function load_tweets() {
 
                 const item =
                     `                    <div class='container'>
-                        <div class='col-8 col-md-8 mx-auto border rounded py-3 mb-4'>
+                        <div class='col-md-8 col-sm-12 mx-auto border rounded py-3 mb-4'>
                             <div>
                                 <small>${data[i].owner_name}</small>
                             </div>

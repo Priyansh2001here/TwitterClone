@@ -11,5 +11,5 @@ urlpatterns = [
     path('login_api', views.login_api),
     path('usr_regis_api', views.user_regis_api),
     path('prof_update', views.prof_update_api),
-    path('prof_update_show', views.prof_update),
+    path('prof_update_show', views.prof_update, name='profile_update'),
 ]

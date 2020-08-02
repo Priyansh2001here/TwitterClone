@@ -111,6 +111,7 @@ def prof_update_api(request, *args, **kwargs):
         return Response({'message': 'invalid'}, status=400)
 
 
+@login_required(login_url='/')
 def prof_update(request, *args, **kwargs):
     if request.method == 'GET':
         return render(request, 'accounts/prof_update.html')
