@@ -1,4 +1,7 @@
 
+var regis_form = document.getElementById('regis-form');
+regis_form.addEventListener('submit', register_form_submit);
+
 
 async function register_form_submit(event) {
     event.preventDefault()

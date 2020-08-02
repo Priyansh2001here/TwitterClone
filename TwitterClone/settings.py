@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'tweets.apps.TweetsConfig',
     'rest_framework.apps.RestFrameworkConfig',
-    'crispy_forms'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

@@ -1,5 +1,10 @@
 
 var userDetails;
+
+var wrapper = document.getElementById("tweets-here");
+stack();
+
+
 async function stack(){
     console.log('stack')
     await get_user()
@@ -13,7 +18,7 @@ var loadFile = function (event) {
     var reset_Btn = document.getElementById("image-reset");
 
     reset_Btn.innerHTML = `<button type="button" onclick="reset_img()" class="btn btn-danger">Remove Image</button>`
-    };
+};
 
 function reset_img() {
     const form_elements = document.getElementById('tweet-create-form').elements;
@@ -29,7 +34,7 @@ function reset_img() {
         <img id="output" width="200" disabled="disabled" class="hidden" alt="Selected Image"/>`
     const reset_Btn = document.getElementById("image-reset");
     reset_Btn.innerHTML = ``
-    }
+}
 
 function getRetweetElm(obj) {
 
@@ -78,11 +83,16 @@ function button_generator(tweet_id, to_do) {
     var new_btn;
     if (usrStat === 403){
         return (`
-                    <div><a href = '{% url 'accounts:login' %}'>
-                    <button class="btn btn-primary">Login</button>
-                        </a></div>
+                    <div>
+                    <button class="btn btn-primary" onclick="$('#modalLRForm').modal('show')">Login</button>
+                        </div>
                     `)
     }
+
+
+    // $('#modalLRForm').modal('show')
+
+
     else if (to_do === "unlike") {
         new_btn = `
                         <div id="tweet-${tweet_id}">
@@ -159,7 +169,7 @@ function load_tweets() {
                 if (if_liked(data[i])){
                     btnElm = button_generator(data[i].id, 'unlike')
                 } else
-                    {
+                {
                     btnElm = button_generator(data[i].id, 'like')
                 }
 
@@ -171,7 +181,7 @@ function load_tweets() {
                 {
                     retweetElm = getRetweetElm(data[i])
                 }else
-                    {
+                {
                     retweetElm = `<div disabled="disabled"></div>`
                 }
 
@@ -186,7 +196,7 @@ function load_tweets() {
                 }
 
                 else
-                    {
+                {
                     imgElm = '<div disabled="disabled"></div>'
                 }
 

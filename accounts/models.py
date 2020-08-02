@@ -14,7 +14,7 @@ class Profile(models.Model):
     usr = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     bio = models.TextField(null=True, blank=True)
     prof_img = models.ImageField(blank=True, upload_to='accounts/profile_img', null=True)
-    follower = models.ManyToManyField(User, blank=True, null=True, related_name='following')
+    follower = models.ManyToManyField(User, blank=True, related_name='following')
     banner_img = models.ImageField(blank=True, upload_to='accounts/banner_img', null=True)
 
     def __str__(self):
@@ -22,17 +22,3 @@ class Profile(models.Model):
 
 
 post_save.connect(auto_prof_create, sender=User)
-
-'''
-<django.db.models.fields.related_descriptors.create_forward_many_to_many_manager.<locals>.ManyRelatedManager object at 0x0000018B69855908>
-Profile.objects.first().follower.all()
-<QuerySet []>
-Profile.objects.first().following.all()
-Traceback (most recent call last):
-  File "<input>", line 1, in <module>
-AttributeError: 'Profile' object has no attribute 'following'
-u1.following.all()
-<QuerySet []>
-if self:
-    :return
-    '''

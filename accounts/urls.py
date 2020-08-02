@@ -1,9 +1,8 @@
 from django.urls import path
+
 from . import views
-from rest_framework import routers
 
-
-app_name= 'accounts'
+app_name = 'accounts'
 urlpatterns = [
     path('login', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
