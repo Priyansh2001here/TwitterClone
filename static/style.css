@@ -1,0 +1,90 @@
+#pics {
+    position: relative;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100vmin;
+    /* height: 16.67vmin; */
+}
+#prof-pic
+{
+    position: absolute;
+    top: 24vmin;
+    left: 2vmin;
+    z-index: 1;
+}
+#output-prof-img {
+    width: 16vmin;
+    height: 16vmin;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#output-banner-img {
+    width: 100vmin;
+    height: 33.33vmin;
+    object-fit: cover;
+}
+
+.change-butt {
+    margin-top: 10vmin;
+    padding-left: 35%;
+}
+
+.container {
+    max-width: 100vmin;
+}
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.inputfile + label {
+    max-width: 50%;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.5rem 1rem;
+}
+
+.inputfile + label {
+    color: #f1e5e6;
+    background-color: blue;
+}
+.inputfile + label:hover {
+    background-color: #121474;
+}
+
+.remov-butt {
+    display: flex;
+    flex-flow: row wrap;
+    max-width: 50%;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.4rem 0.8rem;
+    color: #f1e5e6;
+    background-color: blue;
+}
+
+.remov-butt:hover {
+    background-color: #121474;
+}
+
+.remov {
+    padding-left: 35%;
+}
+
+
