@@ -61,11 +61,18 @@ function getRetweetElm(obj) {
     return retweetElm
 }
 
-function retweetBtn(tweetID) {
+function retweetBtn(tweetID, retweet_count) {
     if (usrStat !== 403) {
+        if (!retweet_count){
+            retweet_count = 0
+        }
         return (
             `
-    <div ><a href="/tweets/${tweetID}/retweet"><button class="btn btn-success" style="padding-left: 3px;margin-left: 3px">Retweet</button></a></div>
+    <div><a href="/tweets/${tweetID}/retweet"><button class="btn btn-success" style="padding-left: 3px;margin-left: 3px">Retweet</button></a>
+    <div>
+    <small>${retweet_count} retweets</small>
+           </div>
+           </div>
             `
         )
     }else {
@@ -217,7 +224,7 @@ function load_tweets() {
                                 ${retweetElm}
                             </div>
                             <div style="padding-bottom: 1px">
-                                <div class="btn-group">${btnElm}${retweetBtn(data[i].id)}</div>
+                                <div class="btn-group">${btnElm}${retweetBtn(data[i].id, data[i].retweet_count)}</div>
                             </div>
                         </div>
                     </div>`;
