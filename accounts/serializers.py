@@ -24,6 +24,8 @@ class ProfileSerializer(ModelSerializer):
     prof_user = serializers.SerializerMethodField()
     all_tweets = serializers.SerializerMethodField()
 
+
+
     class Meta:
         model = Profile
         fields = ['bio', 'prof_img', 'banner_img', 'followers', 'prof_user', 'following', 'all_tweets']
@@ -43,9 +45,11 @@ class ProfileSerializer(ModelSerializer):
         return UserSerializer(all_following, many=True).data
 
     def get_all_tweets(self, obj: Profile):
+        context = self.context
+        request = context.get('request')
         usr = obj.usr
         all_tweets = usr.tweet_set.all()
-        return TweetSerializer(all_tweets, many=True).data
+        return TweetSerializer(all_tweets, many=True, context={'request':request}).data
 
 
 class LoginSerializer(serializers.Serializer):

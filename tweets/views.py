@@ -58,7 +58,7 @@ def action_serialize(request, *args, **kwargs):
 @api_view(['GET'])
 def tweet_serialize(request):
     tweet = Tweet.objects.all()
-    serailized = TweetSerializer(tweet, many=True)
+    serailized = TweetSerializer(tweet, many=True, context={'request':request})
     return Response(serailized.data)
 
 

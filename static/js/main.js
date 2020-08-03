@@ -6,13 +6,11 @@ stack();
 
 
 async function stack(){
-    console.log('stack')
     await get_user()
     await load_tweets();
 }
 
 var loadFile = function (event) {
-    console.log("triggered")
     var image = document.getElementById('output');
     image.src = URL.createObjectURL(event.target.files[0]);
     var reset_Btn = document.getElementById("image-reset");
@@ -22,13 +20,9 @@ var loadFile = function (event) {
 
 function reset_img() {
     const form_elements = document.getElementById('tweet-create-form').elements;
-    console.log("reset_img fun triggered")
-    console.log( "form_elements[2].value    ->   ", form_elements[2].value)
     form_elements[2].value="";
 
-    console.log("elm    -> " ,document.getElementById("output").src)
     document.getElementById("output").src = ""
-    console.log("elm    -> " ,document.getElementById("output").src)
 
     document.getElementById("output").innerHTML = `
         <img id="output" width="200" disabled="disabled" class="hidden" alt="Selected Image"/>`
@@ -79,8 +73,11 @@ function retweetBtn(tweetID) {
     }
 }
 
-function button_generator(tweet_id, to_do) {
+function button_generator(tweet_id, likes_count, to_do) {
     var new_btn;
+    if (!likes_count){
+        likes_count = 0
+    }
     if (usrStat === 403){
         return (`
                     <div>
@@ -90,19 +87,22 @@ function button_generator(tweet_id, to_do) {
     }
 
 
-    // $('#modalLRForm').modal('show')
-
-
     else if (to_do === "unlike") {
         new_btn = `
                         <div id="tweet-${tweet_id}">
-                    <button class="btn btn-danger" id=${tweet_id} onclick=action(${tweet_id},'unlike')>Unlike</button>
+                    <button class="btn btn-danger" id=${tweet_id} onclick="action(${tweet_id},${likes_count}, 'unlike')">Unlike</button>
+                    <div>
+                    <small>${likes_count} likes</small>
+                    </div>
                         </div>
                     `
     }else if (to_do === "like"){
         new_btn = `
                            <div id="tweet-${tweet_id}">
-                        <button class="btn" style="background-color: aquamarine" id=${tweet_id}, onclick=action(${tweet_id},'like')>Like</button>
+                            <button class="btn" style="background-color: aquamarine" id=${tweet_id} onclick="action(${tweet_id}, ${likes_count}, 'like')">Like</button>
+                            <div>
+                            ${likes_count}
+                            </div>
                             </div>
                     `
     }
@@ -110,11 +110,10 @@ function button_generator(tweet_id, to_do) {
 }
 
 function if_liked(tweet_obj) {
-    return !!tweet_obj.likes.includes(userDetails.id);
-
+    return tweet_obj.is_liked
 }
 
-async function action(tweet_id, action){
+async function action(tweet_id, likes_count, action){
     document.getElementById("tweet-" + tweet_id).innerHTML = `
                         <div id="tweet-${tweet_id}">
                             <button class="btn" id=${tweet_id}>.....</button>
@@ -139,12 +138,14 @@ async function action(tweet_id, action){
 
     if (server_response === "liked")
     {
-        tempBtn = button_generator(tweet_id, 'unlike')
+        likes_count+=1
+        tempBtn = button_generator(tweet_id, likes_count, 'unlike')
         var element = document.getElementById("tweet-" + tweet_id)
         element.innerHTML = tempBtn
     }else if (server_response === "like deleted")
     {
-        tempBtn = button_generator(tweet_id, 'like')
+        likes_count-=1
+        tempBtn = button_generator(tweet_id, likes_count, 'like')
         var element = document.getElementById("tweet-" + tweet_id)
         element.innerHTML = tempBtn
     }
@@ -165,12 +166,11 @@ function load_tweets() {
             wrapper.innerHTML = ""
             for (let i = 0; i< data.length; i++){
 
-
                 if (if_liked(data[i])){
-                    btnElm = button_generator(data[i].id, 'unlike')
+                    btnElm = button_generator(data[i].id, data[i].likes_count, 'unlike')
                 } else
                 {
-                    btnElm = button_generator(data[i].id, 'like')
+                    btnElm = button_generator(data[i].id, data[i].likes_count, 'like')
                 }
 
                 var is_retweet;
