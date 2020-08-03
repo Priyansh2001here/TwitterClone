@@ -108,7 +108,7 @@ function button_generator(tweet_id, likes_count, to_do) {
                            <div id="tweet-${tweet_id}">
                             <button class="btn" style="background-color: aquamarine" id=${tweet_id} onclick="action(${tweet_id}, ${likes_count}, 'like')">Like</button>
                             <div>
-                            ${likes_count}
+                            ${likes_count} Likes
                             </div>
                             </div>
                     `

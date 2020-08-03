@@ -64,10 +64,7 @@ class TweetSerializer(ModelSerializer):
         return None
 
     def get_retweet_count(self, obj: Tweet):
-        if not obj.is_retweet:
-            return None
-        else:
-            return obj.retweets.count()
+        return obj.retweets.all().count()
 
     def get_is_liked(self, obj: Tweet) -> bool:
         context = self.context
