@@ -44,7 +44,7 @@ def userinf(request):
 def profile_view(request, pk, *args, **kwargs):
     user_obj = get_object_or_404(User, id=pk)
     profile_obj = get_object_or_404(Profile, usr=user_obj)
-    return Response(ProfileSerializer(profile_obj).data)
+    return Response(ProfileSerializer(profile_obj, context={'request': request}).data)
 
 
 @api_view(['POST'])
@@ -77,7 +77,8 @@ def user_regis_api(request):
         if user2 or user:
             return Response({'message': 'user already exists'}, status=409)
         if password1 != password2:
-            return Response({'message': 'paswords donot match'}, status=409)
+            print('mismatch')
+            return Response(data={'message': 'paswords donot match'}, status=409)
 
         usr = User.objects.create_user(username=username,
                                        email=email,
@@ -106,8 +107,17 @@ def prof_update_api(request, *args, **kwargs):
         serialized = ProfileUpdateSerializer(instance=prof_obj, data=request.data)
         if serialized.is_valid(raise_exception=True):
             serialized.save()
+            first_name = request.data.get('first_name')
+            last_name = request.data.get('last_name')
+
+            usr = request.user
+            usr.first_name = first_name
+            usr.last_name = last_name
+            usr.save()
+            print(usr.first_name)
 
             return Response({'message': 'saved'}, status=200)
+        print('invalid')
         return Response({'message': 'invalid'}, status=400)
 
 
@@ -115,3 +125,15 @@ def prof_update_api(request, *args, **kwargs):
 def prof_update(request, *args, **kwargs):
     if request.method == 'GET':
         return render(request, 'accounts/prof_update.html')
+
+
+@login_required(login_url='/')
+def profile_page(request, *args, **kwargs):
+    return render(request, 'accounts/profile_view.html')
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def profile(request, *args, **kwargs):
+    profile_obj = get_object_or_404(Profile, usr=request.user)
+    return Response(ProfileSerializer(profile_obj, context={'request': request}).data)

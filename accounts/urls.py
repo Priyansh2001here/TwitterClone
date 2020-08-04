@@ -8,8 +8,10 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('usrinfo', views.userinf),
     path('api/profile/<int:pk>', views.profile_view),
+    path('api/profile', views.profile),
     path('login_api', views.login_api),
     path('usr_regis_api', views.user_regis_api),
     path('prof_update', views.prof_update_api),
     path('prof_update_show', views.prof_update, name='profile_update'),
+    path('profile', views.profile_page)
 ]

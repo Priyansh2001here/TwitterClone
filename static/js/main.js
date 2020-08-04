@@ -1,13 +1,18 @@
 
 var userDetails;
 
-var wrapper = document.getElementById("tweets-here");
-stack();
+var wrapper;
 
 
-async function stack(){
+async function stack(all=true){
+    wrapper = document.getElementById("tweets-here");
     await get_user()
-    await load_tweets();
+    if (all) {
+        await load_tweets();
+    }
+    else {
+        await load_tweets(all=false)
+    }
 }
 
 var loadFile = function (event) {
@@ -32,33 +37,45 @@ function reset_img() {
 
 function getRetweetElm(obj) {
 
-    var imgElmRe;
-    if (obj.parent_serialized.img != null){
-        imgElmRe = (`
+    if (get_is_retweet(obj)){
+
+        const date_time_created = obj.parent_serialized.date_created.split('T')
+        const date_created = date_time_created[0]
+        const time_created = date_time_created[1].split('.')[0]
+
+        var imgElmRe;
+        if (obj.parent_serialized.img != null) {
+            imgElmRe = (`
                     <div>
                         <img src="${obj.parent_serialized.img}" height="80%" width="80%" alt="Retweeted Image">
                     </div>
                 `)
-    }else {
-        imgElmRe = '<div disabled="disabled"></div>'
-    }
+        } else {
+            imgElmRe = '<div disabled="disabled"></div>'
+        }
 
-    retweetElm = `
+        return `
                 <div class='container'>
                     <div class='col-md-8 col-sm-12 mx-auto border rounded py-3 mb-4'>
                         <div>
                             <small>${obj.parent_serialized.owner_name}</small>
+                                <span style="margin-left: 60%">
+                                    <small>${date_created}  ${time_created}</small>
+                                </span>
                         </div>
-                            <div class="container retwtcls">
-                                ${obj.parent_serialized.content}
-                            </div>
-                            <div>
+                        <div class="container retwtcls">
+                            ${obj.parent_serialized.content}
+                        </div>
+                        <div>
                                 ${imgElmRe}
-                            </div>
+                        </div>
                     </div>
                 </div>
             `
-    return retweetElm
+    }
+    else {
+        return `<div disabled="disabled"></div>`
+    }
 }
 
 function retweetBtn(tweetID, retweet_count) {
@@ -68,11 +85,12 @@ function retweetBtn(tweetID, retweet_count) {
         }
         return (
             `
-    <div><a href="/tweets/${tweetID}/retweet"><button class="btn btn-success" style="padding-left: 3px;margin-left: 3px">Retweet</button></a>
-    <div>
-    <small>${retweet_count} retweets</small>
-           </div>
-           </div>
+            <div>
+                <a href="/tweets/${tweetID}/retweet"><button class="btn btn-success" style="padding-left: 3px;margin-left: 3px">Retweet</button></a>
+                <div style="margin-left: 7%">
+                    <small>${retweet_count} retweets</small>
+                </div>
+            </div>
             `
         )
     }else {
@@ -87,31 +105,31 @@ function button_generator(tweet_id, likes_count, to_do) {
     }
     if (usrStat === 403){
         return (`
-                    <div>
+                 <div>
                     <button class="btn btn-primary" onclick="$('#modalLRForm').modal('show')">Login</button>
-                        </div>
+                 </div>
                     `)
     }
 
 
     else if (to_do === "unlike") {
         new_btn = `
-                        <div id="tweet-${tweet_id}">
-                    <button class="btn btn-danger" id=${tweet_id} onclick="action(${tweet_id},${likes_count}, 'unlike')">Unlike</button>
-                    <div>
-                    <small>${likes_count} likes</small>
-                    </div>
-                        </div>
-                    `
+                   <div id="tweet-${tweet_id}">
+                       <button class="btn btn-danger" id=${tweet_id} onclick="action(${tweet_id},${likes_count}, 'unlike')">Unlike</button>
+                       <div>
+                           <small>${likes_count} likes</small>
+                       </div>
+                   </div>
+                   `
     }else if (to_do === "like"){
         new_btn = `
-                           <div id="tweet-${tweet_id}">
-                            <button class="btn" style="background-color: aquamarine" id=${tweet_id} onclick="action(${tweet_id}, ${likes_count}, 'like')">Like</button>
-                            <div>
-                            ${likes_count} Likes
-                            </div>
-                            </div>
-                    `
+                   <div id="tweet-${tweet_id}">
+                       <button class="btn" style="background-color: aquamarine" id=${tweet_id} onclick="action(${tweet_id}, ${likes_count}, 'like')">Like</button>
+                       <div>
+                           <small>${likes_count} Likes</small>
+                       </div>
+                   </div>
+                  `
     }
     return new_btn;
 }
@@ -165,56 +183,77 @@ async function get_user() {
     usrStat = resp1.status
 }
 
-function load_tweets() {
-    const url = "/tweets_api"
-    fetch(url)
-        .then((resp) => resp.json())
-        .then(function get_data(data) {
-            wrapper.innerHTML = ""
-            for (let i = 0; i< data.length; i++){
-
-                if (if_liked(data[i])){
-                    btnElm = button_generator(data[i].id, data[i].likes_count, 'unlike')
-                } else
-                {
-                    btnElm = button_generator(data[i].id, data[i].likes_count, 'like')
-                }
-
-                var is_retweet;
-                let retweetElm;
-                is_retweet = data[i].parent_serialized != null;
-
-                if (is_retweet)
-                {
-                    retweetElm = getRetweetElm(data[i])
-                }else
-                {
-                    retweetElm = `<div disabled="disabled"></div>`
-                }
-
-                let imgElm;
-                if (data[i].img != null)
-                {
-                    imgElm = ( `
+function get_imgElm(obj) {
+    if (obj.img != null) {
+        return (`
                         <div>
-                            <img src="${data[i].img}" height="80%" width="80%" style="margin-bottom: 1%; margin-top: 0.3%">
+                            <img src="${obj.img}" height="80%" width="80%" style="margin-bottom: 1%; margin-top: 0.3%" alt="tweeted image">
                         </div>
                     `)
-                }
+    } else {
+        return '<div disabled="disabled"></div>'
+    }
+}
 
-                else
-                {
-                    imgElm = '<div disabled="disabled"></div>'
-                }
 
-                const item =
-                    `                    <div class='container'>
-                        <div class='col-md-8 col-sm-12 mx-auto border rounded py-3 mb-4'>
+function gen_btnElm(obj) {
+    let btnElm;
+    if (if_liked(obj)) {
+        btnElm = button_generator(obj.id, obj.likes_count, 'unlike')
+    } else {
+        btnElm = button_generator(obj.id, obj.likes_count, 'like')
+    }
+    return btnElm
+}
+
+function get_is_retweet(obj){
+    return obj.parent_serialized != null;
+}
+
+function load_tweets(all=true) {
+    if (all) {
+        const url = "/tweets_api"
+        fetch(url)
+            .then((resp) => resp.json())
+            .then(function get_data(data) {
+
+
+                wrapper.innerHTML = ""
+                for (let i = 0; i < data.length; i++) {
+                    let retweetElm = getRetweetElm(data[i])
+                    const btnElm = gen_btnElm(data[i])
+                    const imgElm = get_imgElm(data[i])
+                    const item = format_tweet(data[i], imgElm, retweetElm, btnElm)
+                    wrapper.innerHTML += item
+                }
+            })
+
+    }
+
+    else {
+        load_profile();
+    }
+}
+
+function format_tweet(obj, imgElm, retweetElm, btnElm){
+
+    const date_time_created = obj.date_created.split('T')
+    const date_created = date_time_created[0]
+    const time_created = date_time_created[1].split('.')[0]
+
+
+
+    return `                    
+                    <div class='container'>
+                        <div class='col-md-8 col-sm-12 mx-auto rounded py-3 mb-4'>
                             <div>
-                                <small>${data[i].owner_name}</small>
+                                <small>${obj.owner_name}</small>
+                                <span style="margin-left: 72%">
+                                    <small>${date_created}  ${time_created}</small>
+                                </span>
                             </div>
                             <div class="container">
-                                ${data[i].content}
+                                ${obj.content}
                             </div>
                                 <br>
                                 <div class="container">
@@ -224,14 +263,12 @@ function load_tweets() {
                                 ${retweetElm}
                             </div>
                             <div style="padding-bottom: 1px">
-                                <div class="btn-group">${btnElm}${retweetBtn(data[i].id, data[i].retweet_count)}</div>
+                                <div class="btn-group">${btnElm}${retweetBtn(obj.id, obj.retweet_count)}</div>
                             </div>
                         </div>
-                    </div>`;
-                wrapper.innerHTML+=item
-            }
-
-        } )
+                    <hr>
+                    </div>    
+                `
 }
 
 function getCookie(name) {

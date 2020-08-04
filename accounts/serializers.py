@@ -8,15 +8,8 @@ from tweets.serializer import TweetSerializer
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name']
+        fields = ['username', 'first_name', 'last_name']
 
-
-#
-# class UserCreateSerialize(ModelSerializer):
-#
-#     class Meta:
-#         model = User
-#         fields = ['email', '']
 
 class ProfileSerializer(ModelSerializer):
     followers = serializers.SerializerMethodField('get_followers')
@@ -31,9 +24,7 @@ class ProfileSerializer(ModelSerializer):
         fields = ['bio', 'prof_img', 'banner_img', 'followers', 'prof_user', 'following', 'all_tweets']
 
     def get_followers(self, obj: Profile):
-        all_followers = obj.follower.all()
-        print("called\n")
-        return UserSerializer(all_followers, many=True).data
+        return obj.follower.all().count()
 
     def get_prof_user(self, obj: Profile):
         usr = obj.usr
@@ -41,8 +32,7 @@ class ProfileSerializer(ModelSerializer):
 
     def get_following(self, obj: Profile):
         usr = obj.usr
-        all_following = usr.following.all()
-        return UserSerializer(all_following, many=True).data
+        return usr.following.all().count()
 
     def get_all_tweets(self, obj: Profile):
         context = self.context
@@ -65,8 +55,8 @@ class UserCreateSerializer(serializers.Serializer):
     password1 = serializers.CharField()
     password2 = serializers.CharField()
 
-
 class ProfileUpdateSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Profile
         fields = ['bio', 'prof_img', 'banner_img']

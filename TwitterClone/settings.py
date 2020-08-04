@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ['*']
 
 
 # Application definition
+# SECURE_SSL_REDIRECT  = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',

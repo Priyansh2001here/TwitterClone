@@ -14,7 +14,7 @@ function rem_ban() {
     document.getElementById('banner-img').value = ""
 }
 
-async function getDetails() {
+async function getProfDetails() {
     let resp1 = await fetch('/accounts/prof_update')
     resp1 = await resp1.json()
 
@@ -47,12 +47,22 @@ function load_banner() {
     document.getElementById('remove-banner-img').style.display = 'inline'
 }
 
-getDetails()
+getProfDetails()
+getUsrDetails()
 
 var formdata = new FormData()
 var form = document.getElementById('my-frm')
 form.addEventListener('submit', submit_from)
 
+async function getUsrDetails() {
+    console.log('triggered')
+    let resp1 = await fetch('/accounts/usrinfo')
+    resp1 = await resp1.json()
+    console.log(resp1)
+    document.getElementById('first_name').value = resp1.first_name
+    document.getElementById('last_name').value = resp1.last_name
+
+}
 
 async function submit_from(event) {
     event.preventDefault()
@@ -70,6 +80,11 @@ async function submit_from(event) {
     } else if (banner_img) {
         formdata.append('banner_img', banner_img)
     }
+
+    formdata.append('first_name',    document.getElementById('first_name').value)
+    formdata.append('last_name',     document.getElementById('last_name').value)
+
+
     const options = {
         method: 'POST',
         headers: {

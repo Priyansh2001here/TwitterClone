@@ -14,6 +14,7 @@ class RetweetSerializer(serializers.ModelSerializer):
             'content',
             'owner_name',
             'img',
+            'date_created',
         ]
 
     def get_owner_name(self, obj : Tweet):
@@ -45,6 +46,7 @@ class TweetSerializer(ModelSerializer):
             'img',
             'retweet_count',
             'parent_serialized',
+            'date_created',
         ]
 
     def liked_by(self, obj: Tweet):

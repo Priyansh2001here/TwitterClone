@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
           crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+    {% block head %}{% endblock %}
     {% block custom_css %}{% endblock custom_css %}
     {% block js %} {% endblock %}
 
@@ -186,7 +186,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
-                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" href="/accounts/profile">Profile</a>
                         <a class="dropdown-item" href="{% url 'accounts:profile_update' %}">Update Profile</a>
                     </div>
                     {% else %}

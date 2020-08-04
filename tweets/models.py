@@ -19,6 +19,7 @@ class Tweet(models.Model):
     content = models.TextField(blank=True, null=True)
     parent = models.ForeignKey("self", blank=True, null=True, on_delete=models.SET_NULL, related_name='retweets')
     img = models.FileField(blank=True, null=True, upload_to="tweets/images")
+    date_created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-id']
