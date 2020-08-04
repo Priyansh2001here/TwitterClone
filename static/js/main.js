@@ -4,6 +4,44 @@ var userDetails;
 var wrapper;
 
 
+function search(){
+    const search_term = document.getElementById('search-field').value
+
+    if (search_term === ""){
+        console.log('cls')
+        document.getElementById('tweets-here').style.display = 'block'
+        document.getElementById('search-results').style.display = 'none'
+        return
+        // document.getElementById('search-results')
+    }
+
+    const url = `accounts/api/search/${search_term}`
+    fetch(url)
+        .then((resp) => resp.json())
+        .then(function (data) {
+            const results = data.results
+            console.log(data)
+            if (results){
+                document.getElementById('tweets-here').style.display = 'none'
+                document.getElementById('search-results').style.display = 'block'
+                document.getElementById('search-results').innerHTML = ""
+                for (var i = 0; i< results.length; i++) {
+                    document.getElementById('search-results').innerHTML += `
+                        <div>
+                            <div>${results[i]}</div>
+                            <hr>
+                            <br>
+                        </div>        
+                        `
+                }
+
+            } else {
+                document.getElementById('search-results').innerHTML = 'No Search Results'
+
+            }
+        })
+}
+
 async function stack(all=true){
     wrapper = document.getElementById("tweets-here");
     await get_user()

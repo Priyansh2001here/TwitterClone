@@ -13,5 +13,6 @@ urlpatterns = [
     path('usr_regis_api', views.user_regis_api),
     path('prof_update', views.prof_update_api),
     path('prof_update_show', views.prof_update, name='profile_update'),
-    path('profile', views.profile_page)
+    path('profile', views.profile_page),
+    path('api/search/<str:term>', views.search)
 ]

@@ -1,13 +1,18 @@
+from django.contrib.messages import api
+
 from .models import Profile
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
-from django.http import JsonResponse
+from rest_framework.filters import SearchFilter
+from rest_framework import filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, ProfileSerializer, LoginSerializer, UserCreateSerializer, \
     ProfileUpdateSerializer
 from rest_framework.response import Response
+from rest_framework import generics
+from .filters import UserFilter
 
 
 def login(request, *args, **kwargs):
@@ -137,3 +142,11 @@ def profile_page(request, *args, **kwargs):
 def profile(request, *args, **kwargs):
     profile_obj = get_object_or_404(Profile, usr=request.user)
     return Response(ProfileSerializer(profile_obj, context={'request': request}).data)
+
+@api_view(['GET'])
+def search(request, term):
+    results = User.objects.filter(username__icontains=term)
+    if len(results) != 0:
+        users = list(map(lambda x: x.username, results))
+        return Response({'results' : users})
+    return Response({'results' : None})
