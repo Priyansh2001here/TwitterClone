@@ -188,6 +188,7 @@
                         <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
                         <a class="dropdown-item" href="/accounts/profile">Profile</a>
                         <a class="dropdown-item" href="{% url 'accounts:profile_update' %}">Update Profile</a>
+                        <div id="feed-global"><div class="dropdown-item"  onclick="load_tweets(false, null, false)">Global</div></div>
                     </div>
                     {% else %}
                 <li class="nav-item">

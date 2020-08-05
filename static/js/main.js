@@ -15,7 +15,7 @@ function search(){
         // document.getElementById('search-results')
     }
 
-    const url = `accounts/api/search/${search_term}`
+    const url = `/accounts/api/search/${search_term}`
     fetch(url)
         .then((resp) => resp.json())
         .then(function (data) {
@@ -252,7 +252,8 @@ function get_is_retweet(obj){
     return obj.parent_serialized != null;
 }
 
-function load_tweets(all=true, pk=null) {
+function load_tweets(all=true, pk=null, load_feed=true) {
+    console.log(all, pk, load_feed)
     if (all) {
         const url = "/tweets_api"
         fetch(url)
@@ -272,8 +273,27 @@ function load_tweets(all=true, pk=null) {
 
     }
 
-    else {
+    else if (load_feed && !all && pk===null){
         load_profile(pk);
+    } else if (!load_feed && !all){
+                const url = "/tweets_api/global"
+        fetch(url)
+            .then((resp) => resp.json())
+            .then(function get_data(data) {
+
+
+                wrapper.innerHTML = ""
+                for (let i = 0; i < data.length; i++) {
+                    let retweetElm = getRetweetElm(data[i])
+                    const btnElm = gen_btnElm(data[i])
+                    const imgElm = get_imgElm(data[i])
+                    const item = format_tweet(data[i], imgElm, retweetElm, btnElm)
+                    wrapper.innerHTML += item
+                }
+            })
+
+        document.getElementById('tweets-here').innerHTML = 'Loading......'
+        document.getElementById('feed-global').innerHTML = '<div class="dropdown-item" id="feed-global" onclick="load_tweets(true, null, true)">Feed</div>'
     }
 }
 

@@ -56,6 +56,17 @@ def action_serialize(request, *args, **kwargs):
 @api_view(['GET'])
 def tweet_serialize(request):
     tweet = Tweet.objects.all()
+    if request.user.is_authenticated:
+        usr = request.user
+        following_users = usr.following.all()
+        print(following_users)
+        following_users_id = [x.id for x in following_users]
+        following_users_id.append(usr.id)
+        print(following_users_id)
+        tweets = Tweet.objects.filter(owner_id__in=following_users_id).order_by('-date_created')
+        print(tweets)
+        serailized = TweetSerializer(tweets, many=True, context={'request': request})
+        return Response(serailized.data)
     serailized = TweetSerializer(tweet, many=True, context={'request':request})
     return Response(serailized.data)
 
@@ -77,3 +88,10 @@ def retweet(request, tweet_id, *args, **kwargs):
         'tweet': tweet,
         'user': request.user,
     })
+
+
+@api_view(['GET'])
+def tweet_serialize_global(request):
+    # tweet = Tweet.objects.filter(owner=request.user)
+    serailized = TweetSerializer(Tweet.objects.all(), many=True, context={'request':request})
+    return Response(serailized.data)
