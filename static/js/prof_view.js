@@ -1,3 +1,48 @@
+function generate_f_unf_btn(follow_status, usr_id) {
+    if (follow_status == null){
+        return "<div></div>"
+    }
+    else if (follow_status === true) {
+        return `<div id="f-unf-btn-${usr_id}"><button class="btn btn-danger btn-danger-cstm" style="z-index: 1; position: absolute; left: 30vmin" onclick="profile_action('unfollow', ${usr_id})">Unfollow</button></div>`
+    } else return `<div id="f-unf-btn-${usr_id}"><button class="btn btn-primary" style="z-index: 1; position: absolute; left: 30vmin" onclick="profile_action('follow', ${usr_id})" >Follow</button></div>`
+}
+
+async function profile_action(action, usr_id){
+
+    document.getElementById("f-unf-btn-"+usr_id).innerHTML = `<div><button class="btn"></button></div>`
+
+    console.log('triggered')
+    const url = '/accounts/profile/action'
+    const csrf_token = getCookie('csrftoken')
+    options = {
+        method : 'POST',
+        headers : {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrf_token
+        },
+        body: JSON.stringify({
+            usr_id:usr_id,
+            action: action,
+        })
+    }
+    let resp1 = await fetch(url, options)
+    let resp = await resp1.json()
+    console.log("f-unf-btn-"+usr_id)
+    console.log(resp.message)
+        console.log(resp.message)
+    console.log(action === 'follow')
+    console.log(action === 'unfollow')
+
+    if ((resp1.status === 200) && (action === "follow")){
+        document.getElementById("f-unf-btn-"+usr_id).innerHTML = generate_f_unf_btn(true, usr_id)
+    } else if (resp1.status === 200 && resp.message === "you are no longer a follower"){
+            document.getElementById("f-unf-btn-"+usr_id).innerHTML = generate_f_unf_btn(false, usr_id)
+    } else {
+        alert(resp1.message)
+    }
+}
+
+
 function load_profile(pk=null) {
     let url
     if (pk === null) {
@@ -29,7 +74,7 @@ function load_profile(pk=null) {
                 if (prof_img_url) {
                     document.getElementById('output-prof-img').src = prof_img_url
                 }
-
+                document.getElementById('btn-here').innerHTML = generate_f_unf_btn(data.is_following ,pk)
 
                 document.getElementById('first_name').innerText = data.prof_user.first_name
                 document.getElementById('last_name').innerText = data.prof_user.last_name

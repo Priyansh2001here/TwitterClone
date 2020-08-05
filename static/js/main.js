@@ -199,7 +199,7 @@ async function action(tweet_id, likes_count, action){
             action: action,
         })
     }
-    let resp1 = await fetch(`/api/${tweet_id}/${action}`, options)
+    let resp1 = await fetch(`/api/action`, options)
     let status = await resp1.json()
     const server_response = status.message
 

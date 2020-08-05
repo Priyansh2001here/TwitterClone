@@ -1,12 +1,13 @@
-from .models import Profile
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
+from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from .models import Profile
 from .serializers import UserSerializer, ProfileSerializer, LoginSerializer, UserCreateSerializer, \
     ProfileUpdateSerializer
-from rest_framework.response import Response
 
 
 def login(request, *args, **kwargs):
@@ -40,7 +41,7 @@ def userinf(request):
 
 
 @api_view(['GET'])
-def self_profile_view(request, pk, *args, **kwargs):
+def usr_profile_view(request, pk, *args, **kwargs):
     user_obj = get_object_or_404(User, id=pk)
     profile_obj = get_object_or_404(Profile, usr=user_obj)
     return Response(ProfileSerializer(profile_obj, context={'request': request}).data)
@@ -133,22 +134,48 @@ def profile_page(request, *args, **kwargs):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def profile(request, *args, **kwargs):
+def self_profile(request, *args, **kwargs):
     profile_obj = get_object_or_404(Profile, usr=request.user)
     return Response(ProfileSerializer(profile_obj, context={'request': request}).data)
+
 
 @api_view(['GET'])
 def search(request, term):
     results = User.objects.filter(username__icontains=term)
     if len(results) != 0:
         users = list(map(lambda x: (x.username, x.id), results))
-        return Response({'results' : users})
-    return Response({'results' : None})
+        return Response({'results': users})
+    return Response({'results': None})
 
 
 def profile_view(request, pk):
     if request.user.id == pk:
-        return redirect('/')
+        return redirect('/accounts/profile')
     else:
-        usr = get_object_or_404(User, id=pk)
-        return render(request, 'accounts/prof_view.html', context={'id':pk})
+        return render(request, 'accounts/prof_view.html', context={'id': pk})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def profile_action(request, *args, **kwargs):
+    usr_id = request.user.id
+    action = request.data.get('action')
+    pk = request.data.get('usr_id')
+    print(usr_id, pk)
+    if usr_id == pk:
+        return Response({'message': 'you cant follow yourself'})
+
+    p = get_object_or_404(Profile, usr_id=pk)
+
+
+    if action == 'follow':
+        # User.objects.filter(use)
+        if p.follower.filter(id=usr_id).exists():
+            return Response({'message': 'you are already following'})
+        p.follower.add(request.user)
+        return Response({'message': 'you are now a follower'}, status=200)
+    if action == 'unfollow':
+        if p.follower.filter(id=usr_id).exists():
+            p.follower.remove(request.user)
+            return Response({'message': 'you are no longer a follower'}, status=200)
+        return Response({'message': 'you are not following'})

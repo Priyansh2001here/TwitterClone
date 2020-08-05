@@ -17,6 +17,7 @@
         <div id="prof-pic">
             <img src="https://www.w3schools.com/w3images/avatar2.png" id="output-prof-img">
         </div>
+    <div id="btn-here"></div>
     </div>
     <div class="container form form-inline" style="padding-top: 5%">
         <div class="form-group mx-sm-3 mb-2 form form-inline" style="font-family: 'Slabo 27px', serif; font-weight: 700; font-size: 1.5rem" id="first_name">
@@ -37,6 +38,8 @@
         <div name="bio" id="usr-bio" class="form-group form-control"></div>
     </div>
     <div id="tweets-here">Loading....</div>
+
+    {% block extended-body %}{% endblock %}
 
     {% block custom_js %}
     {% endblock %}

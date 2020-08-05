@@ -16,12 +16,12 @@ class ProfileSerializer(ModelSerializer):
     following = serializers.SerializerMethodField()
     prof_user = serializers.SerializerMethodField()
     all_tweets = serializers.SerializerMethodField()
-
+    is_following = serializers.SerializerMethodField()
 
 
     class Meta:
         model = Profile
-        fields = ['bio', 'prof_img', 'banner_img', 'followers', 'prof_user', 'following', 'all_tweets']
+        fields = ['bio', 'prof_img', 'banner_img', 'followers', 'prof_user', 'following', 'all_tweets', 'is_following']
 
     def get_followers(self, obj: Profile):
         return obj.follower.all().count()
@@ -40,6 +40,16 @@ class ProfileSerializer(ModelSerializer):
         usr = obj.usr
         all_tweets = usr.tweet_set.all()
         return TweetSerializer(all_tweets, many=True, context={'request':request}).data
+
+    def get_is_following(self, obj:Profile):
+        context = self.context
+        request = context.get('request')
+        usr = request.user
+        if usr == obj.usr:
+            return None
+        if obj.follower.filter(id=usr.id).exists():
+            return True
+        return False
 
 
 class LoginSerializer(serializers.Serializer):
