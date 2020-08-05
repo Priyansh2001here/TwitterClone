@@ -1,18 +1,12 @@
-from django.contrib.messages import api
-
 from .models import Profile
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User, auth
-from rest_framework.filters import SearchFilter
-from rest_framework import filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, ProfileSerializer, LoginSerializer, UserCreateSerializer, \
     ProfileUpdateSerializer
 from rest_framework.response import Response
-from rest_framework import generics
-from .filters import UserFilter
 
 
 def login(request, *args, **kwargs):
@@ -46,7 +40,7 @@ def userinf(request):
 
 
 @api_view(['GET'])
-def profile_view(request, pk, *args, **kwargs):
+def self_profile_view(request, pk, *args, **kwargs):
     user_obj = get_object_or_404(User, id=pk)
     profile_obj = get_object_or_404(Profile, usr=user_obj)
     return Response(ProfileSerializer(profile_obj, context={'request': request}).data)
@@ -147,6 +141,14 @@ def profile(request, *args, **kwargs):
 def search(request, term):
     results = User.objects.filter(username__icontains=term)
     if len(results) != 0:
-        users = list(map(lambda x: x.username, results))
+        users = list(map(lambda x: (x.username, x.id), results))
         return Response({'results' : users})
     return Response({'results' : None})
+
+
+def profile_view(request, pk):
+    if request.user.id == pk:
+        return redirect('/')
+    else:
+        usr = get_object_or_404(User, id=pk)
+        return render(request, 'accounts/prof_view.html', context={'id':pk})

@@ -1,4 +1,4 @@
-{% extends 'accounts/profile.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% block head %}
     <link href="https://fonts.googleapis.com/css2?family=Slabo+27px&display=swap" rel="stylesheet">
@@ -38,10 +38,9 @@
     </div>
     <div id="tweets-here">Loading....</div>
 
-{% block custom_js %}
-    <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/prof_view.js' %}"></script>
-    <script>stack(false)</script>
-{% endblock %}
+    {% block custom_js %}
+    {% endblock %}
+
+
 {% endblock %}
 

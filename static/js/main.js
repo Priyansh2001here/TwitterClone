@@ -22,13 +22,15 @@ function search(){
             const results = data.results
             console.log(data)
             if (results){
+                console.log(results)
                 document.getElementById('tweets-here').style.display = 'none'
                 document.getElementById('search-results').style.display = 'block'
                 document.getElementById('search-results').innerHTML = ""
                 for (var i = 0; i< results.length; i++) {
+                    const url = `/accounts/profile/${results[i][1]}`
                     document.getElementById('search-results').innerHTML += `
-                        <div>
-                            <div>${results[i]}</div>
+                        <div><a href=${url}>
+                            <div>${results[i][0]}</div>
                             <hr>
                             <br>
                         </div>        
@@ -42,14 +44,16 @@ function search(){
         })
 }
 
-async function stack(all=true){
+async function stack(all=true, pk=null){
     wrapper = document.getElementById("tweets-here");
     await get_user()
     if (all) {
         await load_tweets();
     }
-    else {
+    else if (pk === null){
         await load_tweets(all=false)
+    } else {
+        await load_tweets(all=false, pk)
     }
 }
 
@@ -248,7 +252,7 @@ function get_is_retweet(obj){
     return obj.parent_serialized != null;
 }
 
-function load_tweets(all=true) {
+function load_tweets(all=true, pk=null) {
     if (all) {
         const url = "/tweets_api"
         fetch(url)
@@ -269,7 +273,7 @@ function load_tweets(all=true) {
     }
 
     else {
-        load_profile();
+        load_profile(pk);
     }
 }
 
@@ -286,7 +290,7 @@ function format_tweet(obj, imgElm, retweetElm, btnElm){
                         <div class='col-md-8 col-sm-12 mx-auto rounded py-3 mb-4'>
                             <div>
                                 <small>${obj.owner_name}</small>
-                                <span style="margin-left: 72%">
+                                <span style="margin-left: 70%">
                                     <small>${date_created}  ${time_created}</small>
                                 </span>
                             </div>
