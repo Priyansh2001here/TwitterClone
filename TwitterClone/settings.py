@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'tweets.apps.TweetsConfig',
     'rest_framework.apps.RestFrameworkConfig',
-    'django_filters'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -132,6 +131,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+STATIC_ROOT = os.path.join('assets')
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 

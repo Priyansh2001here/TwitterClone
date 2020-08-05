@@ -5,7 +5,7 @@ from rest_framework import serializers
 class RetweetSerializer(serializers.ModelSerializer):
 
     owner_name = serializers.SerializerMethodField('get_owner_name')
-
+    owner_id = serializers.SerializerMethodField()
 
     class Meta:
         model = Tweet
@@ -15,12 +15,16 @@ class RetweetSerializer(serializers.ModelSerializer):
             'owner_name',
             'img',
             'date_created',
+            'owner_id'
         ]
 
     def get_owner_name(self, obj : Tweet):
         if obj.owner:
             return obj.owner.username
         return 'User Deeleted'
+
+    def get_owner_id(self, obj : Tweet):
+        return obj.owner_id
 
 class ActionSerializer(serializers.Serializer):
     id = serializers.IntegerField()

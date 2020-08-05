@@ -101,7 +101,8 @@ function getRetweetElm(obj) {
                 <div class='container'>
                     <div class='col-md-8 col-sm-12 mx-auto border rounded py-3 mb-4'>
                         <div>
-                            <small>${obj.parent_serialized.owner_name}</small>
+                               <small><a href="/accounts/profile/${obj.parent_serialized.owner_id}">${obj.parent_serialized.owner_name}</a></small>
+
                                 <span style="margin-left: 60%">
                                     <small>${date_created}  ${time_created}</small>
                                 </span>
