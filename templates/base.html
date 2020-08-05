@@ -188,7 +188,9 @@
                         <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
                         <a class="dropdown-item" href="/accounts/profile">Profile</a>
                         <a class="dropdown-item" href="{% url 'accounts:profile_update' %}">Update Profile</a>
-                        <div id="feed-global"><div class="dropdown-item"  onclick="load_tweets(false, null, false)">Global</div></div>
+                        <div id="feed-global">
+                            <div class="dropdown-item"  onclick="load_tweets(false, null, false)">Global</div>
+                        </div>
                     </div>
                     {% else %}
                 <li class="nav-item">
@@ -203,7 +205,7 @@
         {% endif %}
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search-field" onkeyup="search()">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Search</button>
+{#            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" >Search</button>#}
         </form>
     </div>
 </nav>

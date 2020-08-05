@@ -44,16 +44,17 @@ function search(){
         })
 }
 
-async function stack(all=true, pk=null){
+async function stack(all=true, pk=null, load_feed=true, load_profile_bool=false){
     wrapper = document.getElementById("tweets-here");
+    // console.log(load_profile)
     await get_user()
     if (all) {
         await load_tweets();
     }
     else if (pk === null){
-        await load_tweets(all=false)
+        await load_tweets(all=false, pk, load_feed, load_profile_bool)
     } else {
-        await load_tweets(all=false, pk)
+        await load_tweets(all=false, pk, load_feed, load_profile_bool)
     }
 }
 
@@ -252,9 +253,10 @@ function get_is_retweet(obj){
     return obj.parent_serialized != null;
 }
 
-function load_tweets(all=true, pk=null, load_feed=true) {
-    console.log(all, pk, load_feed)
-    if (all) {
+function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false) {
+    // console.log(all, pk, load_feed, load_profile)
+    if (!all && load_feed && pk===null) {
+        console.log('all')
         const url = "/tweets_api"
         fetch(url)
             .then((resp) => resp.json())
@@ -273,15 +275,18 @@ function load_tweets(all=true, pk=null, load_feed=true) {
 
     }
 
-    else if (load_feed && !all && pk===null){
+    else if (!all && load_profile_bool){
+        console.log('profile')
         load_profile(pk);
-    } else if (!load_feed && !all){
+    }
+    else if (!load_feed && !all){
+        console.log('global')
                 const url = "/tweets_api/global"
         fetch(url)
             .then((resp) => resp.json())
             .then(function get_data(data) {
 
-
+                console.log(data)
                 wrapper.innerHTML = ""
                 for (let i = 0; i < data.length; i++) {
                     let retweetElm = getRetweetElm(data[i])
@@ -290,10 +295,12 @@ function load_tweets(all=true, pk=null, load_feed=true) {
                     const item = format_tweet(data[i], imgElm, retweetElm, btnElm)
                     wrapper.innerHTML += item
                 }
-            })
+            }
+
+            )
 
         document.getElementById('tweets-here').innerHTML = 'Loading......'
-        document.getElementById('feed-global').innerHTML = '<div class="dropdown-item" id="feed-global" onclick="load_tweets(true, null, true)">Feed</div>'
+        document.getElementById('feed-global').innerHTML = '<div class="dropdown-item" id="feed-global" onclick="load_tweets(false, null, true,true)">Feed</div>'
     }
 }
 
@@ -309,7 +316,7 @@ function format_tweet(obj, imgElm, retweetElm, btnElm){
                     <div class='container'>
                         <div class='col-md-8 col-sm-12 mx-auto rounded py-3 mb-4'>
                             <div>
-                                <small>${obj.owner_name}</small>
+                               <small><a href="/accounts/profile/${obj.owner_id}">${obj.owner_name}</a></small>
                                 <span style="margin-left: 70%">
                                     <small>${date_created}  ${time_created}</small>
                                 </span>

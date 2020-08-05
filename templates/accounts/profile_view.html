@@ -13,8 +13,9 @@
 {#{% block custom_js %}#}
 {##}
 {#{% endblock %}#}
+        <script src="{% static 'js/prof_view.js' %}"></script>
+
         <script src="{% static 'js/main.js' %}"></script>
-    <script src="{% static 'js/prof_view.js' %}"></script>
-    <script>stack(false)</script>
+    <script>stack(false, null, false, true)</script>
 {% endblock %}
 

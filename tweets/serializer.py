@@ -34,6 +34,7 @@ class TweetSerializer(ModelSerializer):
     parent_serialized = serializers.SerializerMethodField('get_parent')
     retweet_count = serializers.SerializerMethodField('get_retweet_count')
     is_liked = serializers.SerializerMethodField('get_is_liked')
+    owner_id = serializers.SerializerMethodField()
 
     class Meta:
         model = Tweet
@@ -43,6 +44,7 @@ class TweetSerializer(ModelSerializer):
             'is_liked',
             'content',
             'owner_name',
+            'owner_id',
             'img',
             'retweet_count',
             'parent_serialized',
@@ -77,3 +79,6 @@ class TweetSerializer(ModelSerializer):
                 return True
             return False
         return False
+
+    def get_owner_id(self, obj : Tweet):
+        return obj.owner_id

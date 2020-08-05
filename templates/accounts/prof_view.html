@@ -7,8 +7,7 @@
             <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/prof_view.js' %}"></script>
     <script>
-        var pk = {{ id }}
-        stack(false, pk)
+        const pk = {{ id }};
+        stack(false, pk, false, true)
     </script>
     {% endblock %}
-{#{% endblock %}#}

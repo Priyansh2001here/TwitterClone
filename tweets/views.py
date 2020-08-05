@@ -7,6 +7,7 @@ from .serializer import TweetSerializer, ActionSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from accounts.models import Profile
 
 
 def home(request, *args, **kwargs):
@@ -52,21 +53,20 @@ def action_serialize(request, *args, **kwargs):
                 return Response({"message": "no like was associated"})
         return Response({"message": "tweet not found"}, status=404)
 
-
+from django.db.models import Q
 @api_view(['GET'])
 def tweet_serialize(request):
-    tweet = Tweet.objects.all()
     if request.user.is_authenticated:
         usr = request.user
-        following_users = usr.following.all()
-        print(following_users)
-        following_users_id = [x.id for x in following_users]
-        following_users_id.append(usr.id)
-        print(following_users_id)
-        tweets = Tweet.objects.filter(owner_id__in=following_users_id).order_by('-date_created')
-        print(tweets)
+        following_users_id = usr.following.values_list("usr_id")
+        # following_users_id.append(usr.id)
+        tweets = Tweet.objects.filter(
+            Q(owner_id__in=following_users_id) |
+            Q(owner_id=usr.id)
+        ).order_by('-date_created')
         serailized = TweetSerializer(tweets, many=True, context={'request': request})
         return Response(serailized.data)
+    tweet = Tweet.objects.all()
     serailized = TweetSerializer(tweet, many=True, context={'request':request})
     return Response(serailized.data)
 
