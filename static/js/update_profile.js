@@ -1,4 +1,4 @@
-var remove_banner = 0, remove_avatar = 0
+var remove_banner = 0, remove_avatar = 0, change_banner=0, change_avatar=0
 
 function rem_av() {
     document.getElementById('remove-prof-img').style.display = 'none'
@@ -38,6 +38,7 @@ function load_av() {
     document.getElementById('output-prof-img').src = URL.createObjectURL(prof_img)
     document.getElementById('output-prof-img').style.display = 'block'
     document.getElementById('remove-prof-img').style.display = 'inline'
+    change_avatar = 1
 }
 
 function load_banner() {
@@ -45,6 +46,7 @@ function load_banner() {
     document.getElementById('output-banner-img').src = URL.createObjectURL(banner_img)
     document.getElementById('output-banner-img').style.display = 'block'
     document.getElementById('remove-banner-img').style.display = 'inline'
+    change_banner = 1
 }
 
 getProfDetails()
@@ -66,18 +68,20 @@ async function getUsrDetails() {
 
 async function submit_from(event) {
     event.preventDefault()
+    const btn = document.getElementById('prof-update-btn')
     var prof_img = document.getElementById('prof-img').files[0]
     var banner_img = document.getElementById('banner-img').files[0]
 
+    btn.disabled = true
     if (remove_avatar === 1) {
         formdata.append('prof_img', '')
-    } else if (prof_img) {
+    } else if (prof_img && change_avatar === 1) {
         formdata.append('prof_img', prof_img)
     }
 
     if (remove_banner === 1) {
         formdata.append('banner_img', '')
-    } else if (banner_img) {
+    } else if (banner_img && change_banner === 1) {
         formdata.append('banner_img', banner_img)
     }
 
@@ -101,6 +105,7 @@ async function submit_from(event) {
     }else {
         alert('error occured')
     }
+    btn.disabled = false
 }
 
 

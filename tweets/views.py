@@ -7,6 +7,7 @@ from .serializer import TweetSerializer, ActionSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Q
 
 
 def home(request, *args, **kwargs):
@@ -52,7 +53,7 @@ def action_serialize(request, *args, **kwargs):
                 return Response({"message": "no like was associated"})
         return Response({"message": "tweet not found"}, status=404)
 
-from django.db.models import Q
+
 @api_view(['GET'])
 def tweet_serialize(request):
     if request.user.is_authenticated:
@@ -66,7 +67,7 @@ def tweet_serialize(request):
         serailized = TweetSerializer(tweets, many=True, context={'request': request})
         return Response(serailized.data)
     tweet = Tweet.objects.all()
-    serailized = TweetSerializer(tweet, many=True, context={'request':request})
+    serailized = TweetSerializer(tweet, many=True, context={'request': request})
     return Response(serailized.data)
 
 
@@ -83,7 +84,7 @@ def retweet(request, tweet_id, *args, **kwargs):
                                   parent=tweet,
                                   )
         return redirect("/")
-    return render(request, 'tweetManager/retweet.html',context= {
+    return render(request, 'tweetManager/retweet.html', context={
         'tweet': tweet,
         'user': request.user,
     })
@@ -91,6 +92,5 @@ def retweet(request, tweet_id, *args, **kwargs):
 
 @api_view(['GET'])
 def tweet_serialize_global(request):
-    # tweet = Tweet.objects.filter(owner=request.user)
-    serailized = TweetSerializer(Tweet.objects.all(), many=True, context={'request':request})
+    serailized = TweetSerializer(Tweet.objects.all(), many=True, context={'request': request})
     return Response(serailized.data)

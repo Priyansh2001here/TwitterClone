@@ -1,10 +1,15 @@
 function generate_f_unf_btn(follow_status, usr_id) {
-    if (follow_status == null){
-        return "<div></div>"
+    if (usrStat !== 403) {
+        if (follow_status == null) {
+            return "<div></div>"}
+        else if (follow_status === true) {
+            return `<div id="f-unf-btn-${usr_id}"><button class="btn btn-danger btn-danger-cstm" style="z-index: 1; position: absolute; left: 30vmin" onclick="profile_action('unfollow', ${usr_id})">Unfollow</button></div>`
+        } else {
+            return `<div id="f-unf-btn-${usr_id}"><button class="btn btn-primary" style="z-index: 1; position: absolute; left: 30vmin" onclick="profile_action('follow', ${usr_id})" >Follow</button></div>`
+        }
     }
-    else if (follow_status === true) {
-        return `<div id="f-unf-btn-${usr_id}"><button class="btn btn-danger btn-danger-cstm" style="z-index: 1; position: absolute; left: 30vmin" onclick="profile_action('unfollow', ${usr_id})">Unfollow</button></div>`
-    } else return `<div id="f-unf-btn-${usr_id}"><button class="btn btn-primary" style="z-index: 1; position: absolute; left: 30vmin" onclick="profile_action('follow', ${usr_id})" >Follow</button></div>`
+            return `<div ><button class="btn btn-primary" style="z-index: 1; position: absolute; left: 30vmin" onclick="$('#modalLRForm').modal('show')" >Follow</button></div>`
+
 }
 
 async function profile_action(action, usr_id){
@@ -38,7 +43,12 @@ async function profile_action(action, usr_id){
     } else if (resp1.status === 200 && resp.message === "you are no longer a follower"){
             document.getElementById("f-unf-btn-"+usr_id).innerHTML = generate_f_unf_btn(false, usr_id)
     } else {
-        alert(resp1.message)
+        console.log(resp)
+        console.log(resp1)
+        console.log(resp1)
+        console.log(resp.status)
+        console.log(resp1.status)
+        alert(resp.message)
     }
 }
 

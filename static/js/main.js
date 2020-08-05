@@ -223,7 +223,7 @@ async function action(tweet_id, likes_count, action){
 async function get_user() {
     const url = "/accounts/usrinfo"
     let resp1 = await fetch(url);
-    userDetails = await resp1.json()
+    userDetails = resp1
     usrStat = resp1.status
 }
 
@@ -257,6 +257,12 @@ function get_is_retweet(obj){
 function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false) {
     // console.log(all, pk, load_feed, load_profile)
     if (!all && load_feed && pk===null) {
+
+        if (usrStat !== 403){
+        document.getElementById('tweets-here').innerHTML = 'Loading......'
+        document.getElementById('feed-global').innerHTML = '<div class="dropdown-item"  onclick="load_tweets(false, null, false)">Global</div>'
+        }
+
         console.log('all')
         const url = "/tweets_api"
         fetch(url)
@@ -281,6 +287,7 @@ function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false
         load_profile(pk);
     }
     else if (!load_feed && !all){
+
         console.log('global')
                 const url = "/tweets_api/global"
         fetch(url)
