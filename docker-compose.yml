@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  app:
+    build: .
+    command: python TwitterClone/manage.py runserver 0.0.0.0:8000
+    volumes: 
+      - .:/code
+    ports: 
+      - "8000:8000"
+    depends_on: 
+      - db
+  db:
+    image: postgres
+    environment: 
+        POSTGRES_USER: priyansh
+        POSTGRES_PASSWORD: 2315211
+        POSTGRES_DB:  plateforme
+    restart: always
+    ports: 
+      - "5432:5432"
+      
