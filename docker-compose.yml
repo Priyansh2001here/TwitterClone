@@ -3,7 +3,7 @@ version: '3.7'
 services:
   app:
     build: .
-    command: python TwitterClone/manage.py runserver 0.0.0.0:8000
+    entrypoint: /app/entrypoint.sh
     volumes: 
       - .:/code
     ports: 
