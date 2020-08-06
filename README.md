@@ -31,7 +31,7 @@ There are two methods to run this project on your machine
   if you are able to see the version of docker installed on your machine then you are ready to go
 
   ```
-  $ docker-compose buils
+  $ docker-compose build
   $ docker-compose up
   ```
 
