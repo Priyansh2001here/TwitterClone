@@ -1,13 +1,13 @@
-FROM python:3
+FROM python:3.6
 
-ENV PYTHONUNBUFFERED 1
+RUN mkdir -p /opt/services/djangoapp/src
+WORKDIR /opt/services/djangoapp/src
 
-WORKDIR /app
-
-ADD . /app
-
-COPY ./requirements.txt /app/requirements.txt
-
+COPY ./requirements.txt /opt/services/djangoapp/src
 RUN pip install -r requirements.txt
 
-COPY . /app
+COPY . /opt/services/djangoapp/src
+
+EXPOSE 8000
+
+CMD ["gunicorn", "--chdir", "TwitterClone", "--bind", ":8000", "TwitterClone.wsgi:application"]

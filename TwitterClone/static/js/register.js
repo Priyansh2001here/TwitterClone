@@ -19,14 +19,10 @@ async function register_form_submit(event) {
         )
     }
     let resp = await fetch('/accounts/usr_regis_api', options)
-    console.log('response  ->        ', resp)
     if (resp.status === 200){
         location.reload()
     }else {
         resp = await resp.json()
-        console.log('triggered')
-        console.log('json ->   ', resp)
-        console.log(resp.message)
         alert(resp.message)
     }
 }

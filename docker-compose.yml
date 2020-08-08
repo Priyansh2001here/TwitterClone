@@ -1,22 +1,51 @@
-version: '3.7'
+version: '3'
 
 services:
-  app:
+
+  djangoapp:
     build: .
-    command: python TwitterClone/manage.py runserver 0.0.0.0:8000
-    volumes: 
-      - .:/code
-    ports: 
-      - "8000:8000"
-    depends_on: 
-      - db
-  db:
-    image: postgres
-    environment: 
-        POSTGRES_USER: priyansh
-        POSTGRES_PASSWORD: 2315211
-        POSTGRES_DB:  plateforme
-    restart: always
-    ports: 
-      - "5432:5432"
-      
+    volumes:
+      - .:/opt/services/djangoapp/src
+      - static_volume:/opt/services/djangoapp/static  # <-- bind the static volume
+      - media_volume:/opt/services/djangoapp/media  # <-- bind the media volume
+    networks:
+      - nginx_network
+      - database1_network
+    depends_on:
+      - database1
+    
+
+  nginx:
+    image: nginx:1.13
+    ports:
+      - 8000:80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/opt/services/djangoapp/static  # <-- bind the static volume
+      - media_volume:/opt/services/djangoapp/media  # <-- bind the media volume
+    depends_on:
+      - djangoapp
+    networks:
+      - nginx_network
+
+  database1:
+    image: postgres:10
+    env_file:
+      - config/db/database1_env
+    networks:
+      - database1_network
+    volumes:
+      - database1_volume:/var/lib/postgresql/data
+
+
+networks:
+  nginx_network:
+    driver: bridge
+  database1_network:
+    driver: bridge
+
+volumes:
+  database1_volume:
+  static_volume: 
+  media_volume: 
+

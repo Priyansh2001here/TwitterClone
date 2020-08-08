@@ -57,10 +57,8 @@ var form = document.getElementById('my-frm')
 form.addEventListener('submit', submit_from)
 
 async function getUsrDetails() {
-    console.log('triggered')
     let resp1 = await fetch('/accounts/usrinfo')
     resp1 = await resp1.json()
-    console.log(resp1)
     document.getElementById('first_name').value = resp1.first_name
     document.getElementById('last_name').value = resp1.last_name
 

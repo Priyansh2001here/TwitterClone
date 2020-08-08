@@ -16,7 +16,6 @@ async function profile_action(action, usr_id){
 
     document.getElementById("f-unf-btn-"+usr_id).innerHTML = `<div><button class="btn"></button></div>`
 
-    console.log('triggered')
     const url = '/accounts/profile/action'
     const csrf_token = getCookie('csrftoken')
     options = {
@@ -32,22 +31,12 @@ async function profile_action(action, usr_id){
     }
     let resp1 = await fetch(url, options)
     let resp = await resp1.json()
-    console.log("f-unf-btn-"+usr_id)
-    console.log(resp.message)
-        console.log(resp.message)
-    console.log(action === 'follow')
-    console.log(action === 'unfollow')
 
     if ((resp1.status === 200) && (action === "follow")){
         document.getElementById("f-unf-btn-"+usr_id).innerHTML = generate_f_unf_btn(true, usr_id)
     } else if (resp1.status === 200 && resp.message === "you are no longer a follower"){
             document.getElementById("f-unf-btn-"+usr_id).innerHTML = generate_f_unf_btn(false, usr_id)
     } else {
-        console.log(resp)
-        console.log(resp1)
-        console.log(resp1)
-        console.log(resp.status)
-        console.log(resp1.status)
         alert(resp.message)
     }
 }

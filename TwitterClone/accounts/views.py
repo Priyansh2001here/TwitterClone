@@ -17,7 +17,6 @@ def login(request, *args, **kwargs):
         username = request.POST.get('username')
         pswd = request.POST.get('pswd')
         user = auth.authenticate(request, username=username, password=pswd)
-        print("post")
         if user:
             auth.login(request, user)
             return redirect("/")
@@ -62,7 +61,6 @@ def login_api(request):
 
 @api_view(['POST'])
 def user_regis_api(request):
-    print('data ->  ', request.data)
     serialized = UserCreateSerializer(data=request.data)
     if serialized.is_valid():
 
@@ -77,7 +75,6 @@ def user_regis_api(request):
         if user2 or user:
             return Response({'message': 'user already exists'}, status=409)
         if password1 != password2:
-            print('mismatch')
             return Response(data={'message': 'paswords donot match'}, status=409)
 
         usr = User.objects.create_user(username=username,
@@ -103,7 +100,6 @@ def prof_update_api(request, *args, **kwargs):
         return Response(ProfileUpdateSerializer(prof_obj).data)
 
     if request.method == 'POST':
-        print(request.data)
         serialized = ProfileUpdateSerializer(instance=prof_obj, data=request.data)
         if serialized.is_valid(raise_exception=True):
             serialized.save()
@@ -114,10 +110,8 @@ def prof_update_api(request, *args, **kwargs):
             usr.first_name = first_name
             usr.last_name = last_name
             usr.save()
-            print(usr.first_name)
 
             return Response({'message': 'saved'}, status=200)
-        print('invalid')
         return Response({'message': 'invalid'}, status=400)
 
 
@@ -161,7 +155,6 @@ def profile_action(request, *args, **kwargs):
     usr_id = request.user.id
     action = request.data.get('action')
     pk = request.data.get('usr_id')
-    print(usr_id, pk)
     if usr_id == pk:
         return Response({'message': 'you cant follow yourself'})
 
