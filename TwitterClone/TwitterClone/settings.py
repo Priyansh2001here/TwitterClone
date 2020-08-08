@@ -29,7 +29,7 @@ DEBUG = False
 
 
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 # SECURE_SSL_REDIRECT  = True
@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'rest_framework.apps.RestFrameworkConfig',
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
