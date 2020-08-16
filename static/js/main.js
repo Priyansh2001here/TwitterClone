@@ -8,7 +8,6 @@ function search(){
     const search_term = document.getElementById('search-field').value
 
     if (search_term === ""){
-        console.log('cls')
         document.getElementById('tweets-here').style.display = 'block'
         document.getElementById('search-results').style.display = 'none'
         return
@@ -20,9 +19,7 @@ function search(){
         .then((resp) => resp.json())
         .then(function (data) {
             const results = data.results
-            console.log(data)
             if (results){
-                console.log(results)
                 document.getElementById('tweets-here').style.display = 'none'
                 document.getElementById('search-results').style.display = 'block'
                 document.getElementById('search-results').innerHTML = ""
@@ -262,8 +259,7 @@ function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false
         document.getElementById('tweets-here').innerHTML = 'Loading......'
         document.getElementById('feed-global').innerHTML = '<div class="dropdown-item"  onclick="load_tweets(false, null, false)">Global</div>'
         }
-
-        console.log('all')
+        
         const url = "/tweets_api"
         fetch(url)
             .then((resp) => resp.json())
@@ -283,18 +279,16 @@ function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false
     }
 
     else if (!all && load_profile_bool){
-        console.log('profile')
         load_profile(pk);
     }
     else if (!load_feed && !all){
 
-        console.log('global')
                 const url = "/tweets_api/global"
         fetch(url)
             .then((resp) => resp.json())
             .then(function get_data(data) {
 
-                console.log(data)
+
                 wrapper.innerHTML = ""
                 for (let i = 0; i < data.length; i++) {
                     let retweetElm = getRetweetElm(data[i])
