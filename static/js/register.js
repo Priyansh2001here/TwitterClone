@@ -24,9 +24,6 @@ async function register_form_submit(event) {
         location.reload()
     }else {
         resp = await resp.json()
-        console.log('triggered')
-        console.log('json ->   ', resp)
-        console.log(resp.message)
         alert(resp.message)
     }
 }
