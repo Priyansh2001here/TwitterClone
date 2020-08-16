@@ -2,8 +2,6 @@
 var login_form = document.getElementById('login-form');
 login_form.addEventListener('submit', login_form_submit);
 
-console.log('login-js')
-
 
 async function login_form_submit(event) {
     event.preventDefault()
@@ -11,7 +9,6 @@ async function login_form_submit(event) {
     const myFormData = Object.values(event.target).reduce((obj, field) => { obj[field.name] = field.value; return obj }, {})
 
     const csrftoken = getCookie('csrftoken')
-    console.log(JSON.stringify(myFormData))
     const options = {
         method : 'POST',
         headers:{
