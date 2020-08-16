@@ -3,10 +3,10 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 
 
-class TweetCreateSerializer(serializers.Serializer):
+class TweetCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tweet
-        fields = ['__all__']
+        fields = ['content', 'img', 'owner']
 
 
 class RetweetSerializer(serializers.ModelSerializer):

@@ -2,8 +2,8 @@
 var userDetails;
 
 var wrapper;
-
-
+var tweet_create_form = document.getElementById('tweet-create-form')
+tweet_create_form.addEventListener('submit', create_tweet)
 function search(){
     const search_term = document.getElementById('search-field').value
 
@@ -41,6 +41,44 @@ function search(){
         })
 }
 
+async function create_tweet(event) {
+    event.preventDefault()
+    console.log(event.target)
+    var myForm = event.target
+    var myFormdata = new FormData(myForm)
+    const url = '/tweet_create_api'
+    const options = {
+        method : 'POST',
+        headers: {
+                "X-CSRFToken": getCookie('csrftoken')
+        },
+        body: myFormdata
+    }
+    let resp = await fetch(url, options)
+    if (resp.status === 200) {
+        resp = await resp.json()
+        console.log(resp)
+        let tweets_here = document.getElementById('tweets-here').innerHTML
+
+        let retweetElm = getRetweetElm(resp)
+        const btnElm = gen_btnElm(resp)
+        const imgElm = get_imgElm(resp)
+        const item = format_tweet(resp, imgElm, retweetElm, btnElm)
+
+        tweets_here = item + tweets_here
+        document.getElementById('tweets-here').innerHTML = tweets_here
+        myForm.reset()
+        document.getElementById('output').style.display = 'none'
+        document.getElementById('image-reset').style.display = 'none'
+
+    }else if (resp.status === 413){
+        alert("image too large to upload")
+
+    }else {
+        alert("error occured")
+    }
+}
+
 async function stack(all=true, pk=null, load_feed=true, load_profile_bool=false){
     wrapper = document.getElementById("tweets-here");
     // console.log(load_profile)
@@ -58,9 +96,10 @@ async function stack(all=true, pk=null, load_feed=true, load_profile_bool=false)
 var loadFile = function (event) {
     var image = document.getElementById('output');
     image.src = URL.createObjectURL(event.target.files[0]);
+    image.style.display = 'block'
     var reset_Btn = document.getElementById("image-reset");
-
     reset_Btn.innerHTML = `<button type="button" onclick="reset_img()" class="btn btn-danger">Remove Image</button>`
+    reset_Btn.style.display = 'block'
 };
 
 function reset_img() {

@@ -5,7 +5,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Tweet, Like
 from .forms import TweetForm
 from django.contrib.auth.models import User
-from .serializer import TweetSerializer, ActionSerializer
+from .serializer import TweetSerializer, \
+    ActionSerializer, \
+    TweetCreateSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -16,6 +18,22 @@ def home(request, *args, **kwargs):
     return render(request, 'home.html', {
         'user': request.user,
     })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def tweet_create_api(request):
+    serialized = TweetCreateSerializer(data=request.data)
+    print(request.data)
+    print(serialized.initial_data)
+    if serialized.is_valid():
+        obj = serialized.save()
+        obj.owner = request.user
+        obj.save()
+        serialized_data = TweetSerializer(obj, context={'request': request}).data
+        return Response(data=serialized_data, status=200)
+    return Response(status=400)
+
 
 @login_required()
 def create(request, *args, **kwargs):

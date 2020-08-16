@@ -6,7 +6,7 @@
 
     <div class='row mb-3'>
         <div class='col-md-4 mx-auto col-10 container'>
-            <form class='form' method='POST' action="{% url 'tweets:create' %}" enctype="multipart/form-data" id="tweet-create-form">
+            <form class='form' method='POST' enctype="multipart/form-data" id="tweet-create-form">
                 {% csrf_token %}
                 {#        <div class="container">#}
                 {#            <label>You Tweet here#}

@@ -67,6 +67,9 @@ async function getUsrDetails() {
 
 async function submit_from(event) {
     event.preventDefault()
+
+    const myForm = event.target
+
     const btn = document.getElementById('prof-update-btn')
     var prof_img = document.getElementById('prof-img').files[0]
     var banner_img = document.getElementById('banner-img').files[0]
@@ -100,8 +103,11 @@ async function submit_from(event) {
 
     let resp = await fetch('/accounts/prof_update', options)
     if (resp.status === 200){
+        myForm.reset()
         alert('saved')
-    }else {
+    }else if (resp.status === 413){
+        alert("image too large to upload")
+    } else {
         alert('error occured')
     }
     btn.disabled = false
