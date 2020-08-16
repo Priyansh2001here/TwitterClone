@@ -23,7 +23,6 @@ def create(request, *args, **kwargs):
         if tweet.is_valid():
             obj = tweet.save(commit=False)
             obj.owner = request.user
-            print("\nobj   ", obj, "\n")
             obj.save()
             return redirect("/")
     return redirect("/")
