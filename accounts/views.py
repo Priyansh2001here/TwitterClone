@@ -1,28 +1,20 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, \
+    redirect, \
+    get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Profile
-from .serializers import UserSerializer, ProfileSerializer, LoginSerializer, UserCreateSerializer, \
+from .serializers import \
+    UserSerializer, \
+    ProfileSerializer, \
+    LoginSerializer, \
+    UserCreateSerializer, \
     ProfileUpdateSerializer
 
-
-def login(request, *args, **kwargs):
-    if request.user.is_authenticated:
-        return redirect("/")
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        pswd = request.POST.get('pswd')
-        user = auth.authenticate(request, username=username, password=pswd)
-        if user:
-            auth.login(request, user)
-            return redirect("/")
-        else:
-            return redirect("accounts:login")
-    return render(request, "accounts/login.html")
 
 
 def logout(request, *args, **kwargs):

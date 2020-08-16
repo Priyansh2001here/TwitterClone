@@ -1,4 +1,6 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, \
+    redirect, \
+    get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Tweet, Like
 from .forms import TweetForm
@@ -14,7 +16,6 @@ def home(request, *args, **kwargs):
     return render(request, 'home.html', {
         'user': request.user,
     })
-
 
 @login_required()
 def create(request, *args, **kwargs):

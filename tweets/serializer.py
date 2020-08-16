@@ -2,8 +2,14 @@ from .models import Tweet
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 
-class RetweetSerializer(serializers.ModelSerializer):
 
+class TweetCreateSerializer(serializers.Serializer):
+    class Meta:
+        model = Tweet
+        fields = ['__all__']
+
+
+class RetweetSerializer(serializers.ModelSerializer):
     owner_name = serializers.SerializerMethodField('get_owner_name')
     owner_id = serializers.SerializerMethodField()
 
@@ -18,13 +24,14 @@ class RetweetSerializer(serializers.ModelSerializer):
             'owner_id'
         ]
 
-    def get_owner_name(self, obj : Tweet):
+    def get_owner_name(self, obj: Tweet):
         if obj.owner:
             return obj.owner.username
         return 'User Deeleted'
 
-    def get_owner_id(self, obj : Tweet):
+    def get_owner_id(self, obj: Tweet):
         return obj.owner_id
+
 
 class ActionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -84,5 +91,5 @@ class TweetSerializer(ModelSerializer):
             return False
         return False
 
-    def get_owner_id(self, obj : Tweet):
+    def get_owner_id(self, obj: Tweet):
         return obj.owner_id

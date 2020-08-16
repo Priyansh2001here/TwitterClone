@@ -18,7 +18,6 @@ class ProfileSerializer(ModelSerializer):
     all_tweets = serializers.SerializerMethodField()
     is_following = serializers.SerializerMethodField()
 
-
     class Meta:
         model = Profile
         fields = ['bio', 'prof_img', 'banner_img', 'followers', 'prof_user', 'following', 'all_tweets', 'is_following']
@@ -39,9 +38,9 @@ class ProfileSerializer(ModelSerializer):
         request = context.get('request')
         usr = obj.usr
         all_tweets = usr.tweet_set.all()
-        return TweetSerializer(all_tweets, many=True, context={'request':request}).data
+        return TweetSerializer(all_tweets, many=True, context={'request': request}).data
 
-    def get_is_following(self, obj:Profile):
+    def get_is_following(self, obj: Profile):
         context = self.context
         request = context.get('request')
         usr = request.user
@@ -65,8 +64,19 @@ class UserCreateSerializer(serializers.Serializer):
     password1 = serializers.CharField()
     password2 = serializers.CharField()
 
-class ProfileUpdateSerializer(serializers.ModelSerializer):
 
+class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['bio', 'prof_img', 'banner_img']
+
+    def save(self, *args, **kwargs):
+
+        this = Profile.objects.get(id=self.instance.id)
+
+        if this.prof_img:
+            this.prof_img.delete()
+        if this.banner_img:
+            this.banner_img.delete()
+
+        super(ProfileUpdateSerializer, self).save()

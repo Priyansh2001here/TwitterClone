@@ -1,10 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.db.models import FileField
+from django.db.models.signals import post_save, pre_save
 
 
-# Create your models here.
 def auto_prof_create(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(usr=instance)
