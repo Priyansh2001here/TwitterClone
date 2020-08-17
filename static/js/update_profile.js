@@ -103,8 +103,8 @@ async function submit_from(event) {
 
     let resp = await fetch('/accounts/prof_update', options)
     if (resp.status === 200){
-        myForm.reset()
         alert('saved')
+        formdata = new FormData()
     }else if (resp.status === 413){
         alert("image too large to upload")
     } else {

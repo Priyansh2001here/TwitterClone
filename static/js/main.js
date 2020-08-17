@@ -43,7 +43,6 @@ function search(){
 
 async function create_tweet(event) {
     event.preventDefault()
-    console.log(event.target)
     var myForm = event.target
     var myFormdata = new FormData(myForm)
     const url = '/tweet_create_api'
@@ -57,7 +56,6 @@ async function create_tweet(event) {
     let resp = await fetch(url, options)
     if (resp.status === 200) {
         resp = await resp.json()
-        console.log(resp)
         let tweets_here = document.getElementById('tweets-here').innerHTML
 
         let retweetElm = getRetweetElm(resp)
@@ -81,7 +79,6 @@ async function create_tweet(event) {
 
 async function stack(all=true, pk=null, load_feed=true, load_profile_bool=false){
     wrapper = document.getElementById("tweets-here");
-    // console.log(load_profile)
     await get_user()
     if (all) {
         await load_tweets();
@@ -291,12 +288,12 @@ function get_is_retweet(obj){
 }
 
 function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false) {
-    // console.log(all, pk, load_feed, load_profile)
     if (!all && load_feed && pk===null) {
 
         if (usrStat !== 403){
         document.getElementById('tweets-here').innerHTML = 'Loading......'
-        document.getElementById('feed-global').innerHTML = '<div class="dropdown-item"  onclick="load_tweets(false, null, false)">Global</div>'
+        document.getElementById('feed-global').innerHTML = '<a class="nav-link" style="cursor: pointer" onclick="load_tweets(false, null, false)">Global<span class="sr-only">(current)</span></a>'
+
         }
         
         const url = "/tweets_api"
@@ -307,10 +304,7 @@ function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false
 
                 wrapper.innerHTML = ""
                 for (let i = 0; i < data.length; i++) {
-                    let retweetElm = getRetweetElm(data[i])
-                    const btnElm = gen_btnElm(data[i])
-                    const imgElm = get_imgElm(data[i])
-                    const item = format_tweet(data[i], imgElm, retweetElm, btnElm)
+                    const item = format_tweet(data[i])
                     wrapper.innerHTML += item
                 }
             })
@@ -330,10 +324,8 @@ function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false
 
                 wrapper.innerHTML = ""
                 for (let i = 0; i < data.length; i++) {
-                    let retweetElm = getRetweetElm(data[i])
-                    const btnElm = gen_btnElm(data[i])
-                    const imgElm = get_imgElm(data[i])
-                    const item = format_tweet(data[i], imgElm, retweetElm, btnElm)
+
+                    const item = format_tweet(data[i])
                     wrapper.innerHTML += item
                 }
             }
@@ -341,25 +333,29 @@ function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false
             )
 
         document.getElementById('tweets-here').innerHTML = 'Loading......'
-        document.getElementById('feed-global').innerHTML = '<div class="dropdown-item" id="feed-global" onclick="load_tweets(false, null, true,true)">Feed</div>'
+        document.getElementById('feed-global').innerHTML = '<a class="nav-link" style="cursor: pointer" onclick="load_tweets(false, null, true, true)">Feed<span class="sr-only">(current)</span></a>'
+
     }
+                                    
 }
 
-function format_tweet(obj, imgElm, retweetElm, btnElm){
+function format_tweet(obj){
 
-    const date_time_created = obj.date_created.split('T')
-    const date_created = date_time_created[0]
-    const time_created = date_time_created[1].split('.')[0]
-
-
+    let retweetElm = getRetweetElm(obj)
+    const btnElm = gen_btnElm(obj)
+    const imgElm = get_imgElm(obj)
+    
+    let date_time_created = obj.date_created
+    const myDateTime = new Date(date_time_created)
+    date_time_created = myDateTime.toLocaleString()
 
     return `                    
                     <div class='container'>
                         <div class='col-md-8 col-sm-12 mx-auto rounded py-3 mb-4'>
-                            <div>
-                               <small><a href="/accounts/profile/${obj.owner_id}">${obj.owner_name}</a></small>
-                                <span style="margin-left: 70%">
-                                    <small>${date_created}  ${time_created}</small>
+                            <div class="flex-spacer">
+                               <small style="float: left; margin: 0 1.5%;width: 63%;"><a href="/accounts/profile/${obj.owner_id}">${obj.owner_name}</a></small>
+                                <span style="  float: right; margin: 0 1.5%; width: 30%;">
+                                    <small>${date_time_created}</small>
                                 </span>
                             </div>
                             <div class="container">

@@ -70,7 +70,7 @@ class TweetSerializer(ModelSerializer):
     def get_owner_name(self, obj: Tweet):
         if obj.owner:
             return obj.owner.username
-        return 'User Deeleted'
+        return 'User Deleted'
 
     def get_parent(self, obj: Tweet):
         if obj.is_retweet:

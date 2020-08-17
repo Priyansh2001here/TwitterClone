@@ -120,19 +120,19 @@
 
                                         <div class="md-form form-sm mb-4">
                                             <i class="fas fa-address-book prefix"></i>
-                                            <input type="text" class="form-control form-control-sm validate" name="username" required>
+                                            <input type="text" class="form-control form-control-sm validate" name="username" required id="usrname">
                                             <label data-error="wrong" data-success="right" for="modalLRInput14">Username</label>
                                         </div>
 
                                         <div class="md-form form-sm mb-5">
                                             <i class="fas fa-lock prefix"></i>
-                                            <input type="password"  class="form-control form-control-sm validate" name="password1" required>
+                                            <input type="password"  class="form-control form-control-sm validate" name="password1" required id="pswd1">
                                             <label data-error="wrong" data-success="right" for="modalLRInput13">Your password</label>
                                         </div>
 
                                         <div class="md-form form-sm mb-4">
                                             <i class="fas fa-lock prefix"></i>
-                                            <input type="password" class="form-control form-control-sm validate" name="password2" required>
+                                            <input type="password" class="form-control form-control-sm validate" name="password2" required id="pswd2">
                                             <label data-error="wrong" data-success="right" for="modalLRInput14">Repeat password</label>
                                         </div>
 
@@ -188,10 +188,15 @@
                         <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
                         <a class="dropdown-item" href="/accounts/profile">Profile</a>
                         <a class="dropdown-item" href="{% url 'accounts:profile_update' %}">Update Profile</a>
-                        <div id="feed-global">
-                            <div class="dropdown-item"  onclick="load_tweets(false, null, false)">Global</div>
-                        </div>
+
                     </div>
+                    <li class="nav-item active">
+                        <div id="feed-global">
+                            <a class="nav-link" style="cursor: pointer" onclick="load_tweets(false, null, false)">Global<span class="sr-only">(current)</span></a>
+{#                            <a class="nav-link" href="{% url 'tweets:home' %}">Home<span class="sr-only">(current)</span></a>#}
+
+                        </div>
+                        </li>
                     {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="" data-toggle="modal" data-target="#modalLRForm">Login/Register</a>

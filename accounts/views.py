@@ -16,6 +16,12 @@ from .serializers import \
     ProfileUpdateSerializer
 
 
+def validate_password(password: str) -> bool:
+    return len(password) > 8 and \
+           any(map(str.isdigit, password)) and \
+           any(map(str.isalpha, password)) and \
+           not any(map(str.isspace, password))
+
 
 def logout(request, *args, **kwargs):
     if request.user.is_authenticated:
@@ -67,7 +73,12 @@ def user_regis_api(request):
         if user2 or user:
             return Response({'message': 'user already exists'}, status=409)
         if password1 != password2:
-            return Response(data={'message': 'paswords donot match'}, status=409)
+            return Response(data={'message': 'passwords donot match'}, status=409)
+        if validate_password(password1):
+            return Response(data={'message': 'password must be greater than 8 and must contain digits and alphabets'},
+                            status=409)
+        if len(username) > 25:
+            return Response(data={'message': 'username should be less than 25'})
 
         usr = User.objects.create_user(username=username,
                                        email=email,
@@ -151,7 +162,6 @@ def profile_action(request, *args, **kwargs):
         return Response({'message': 'you cant follow yourself'})
 
     p = get_object_or_404(Profile, usr_id=pk)
-
 
     if action == 'follow':
         # User.objects.filter(use)

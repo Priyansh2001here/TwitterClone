@@ -24,8 +24,6 @@ def home(request, *args, **kwargs):
 @permission_classes([IsAuthenticated])
 def tweet_create_api(request):
     serialized = TweetCreateSerializer(data=request.data)
-    print(request.data)
-    print(serialized.initial_data)
     if serialized.is_valid():
         obj = serialized.save()
         obj.owner = request.user
@@ -77,7 +75,6 @@ def tweet_serialize(request):
     if request.user.is_authenticated:
         usr = request.user
         following_users_id = usr.following.values_list("usr_id")
-        # following_users_id.append(usr.id)
         tweets = Tweet.objects.filter(
             Q(owner_id__in=following_users_id) |
             Q(owner_id=usr.id)
@@ -101,6 +98,7 @@ def retweet(request, tweet_id, *args, **kwargs):
                                   owner=request.user,
                                   parent=tweet,
                                   )
+        t1.save()
         return redirect("/")
     return render(request, 'tweetManager/retweet.html', context={
         'tweet': tweet,

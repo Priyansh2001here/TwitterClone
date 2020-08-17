@@ -8,8 +8,7 @@ function generate_f_unf_btn(follow_status, usr_id) {
             return `<div id="f-unf-btn-${usr_id}"><button class="btn btn-primary" style="z-index: 1; position: absolute; left: 30vmin" onclick="profile_action('follow', ${usr_id})" >Follow</button></div>`
         }
     }
-            return `<div ><button class="btn btn-primary" style="z-index: 1; position: absolute; left: 30vmin" onclick="$('#modalLRForm').modal('show')" >Follow</button></div>`
-
+    return `<div ><button class="btn btn-primary" style="z-index: 1; position: absolute; left: 30vmin" onclick="$('#modalLRForm').modal('show')" >Login</button></div>`
 }
 
 async function profile_action(action, usr_id){
@@ -34,7 +33,7 @@ async function profile_action(action, usr_id){
     if ((resp1.status === 200) && (action === "follow")){
         document.getElementById("f-unf-btn-"+usr_id).innerHTML = generate_f_unf_btn(true, usr_id)
     } else if (resp1.status === 200 && resp.message === "you are no longer a follower"){
-            document.getElementById("f-unf-btn-"+usr_id).innerHTML = generate_f_unf_btn(false, usr_id)
+        document.getElementById("f-unf-btn-"+usr_id).innerHTML = generate_f_unf_btn(false, usr_id)
     } else {
         alert(resp.message)
     }
@@ -55,10 +54,7 @@ function load_profile(pk=null) {
                 const all_tweets = data.all_tweets
                 wrapper.innerHTML = ""
                 for (let i = 0; i < all_tweets.length; i++) {
-                    let retweetElm = getRetweetElm(all_tweets[i])
-                    const btnElm = gen_btnElm(all_tweets[i])
-                    const imgElm = get_imgElm(all_tweets[i])
-                    const item = format_tweet(all_tweets[i], imgElm, retweetElm, btnElm)
+                    const item = format_tweet(all_tweets[i])
                     wrapper.innerHTML += item
                 }
 
