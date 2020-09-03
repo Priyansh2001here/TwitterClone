@@ -3,7 +3,11 @@ from django.contrib.auth.models import User, auth
 from django.shortcuts import render, \
     redirect, \
     get_object_or_404
-from rest_framework.decorators import api_view, permission_classes
+
+from rest_framework.decorators import \
+    api_view, \
+    permission_classes
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -164,7 +168,6 @@ def profile_action(request, *args, **kwargs):
     p = get_object_or_404(Profile, usr_id=pk)
 
     if action == 'follow':
-        # User.objects.filter(use)
         if p.follower.filter(id=usr_id).exists():
             return Response({'message': 'you are already following'})
         p.follower.add(request.user)

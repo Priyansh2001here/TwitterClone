@@ -41,6 +41,11 @@ function search(){
         })
 }
 
+function get_date_time(date_time_created){
+    const myDateTime = new Date(date_time_created)
+    return myDateTime.toLocaleString()
+}
+
 async function create_tweet(event) {
     event.preventDefault()
     var myForm = event.target
@@ -115,9 +120,7 @@ function getRetweetElm(obj) {
 
     if (get_is_retweet(obj)){
 
-        const date_time_created = obj.parent_serialized.date_created.split('T')
-        const date_created = date_time_created[0]
-        const time_created = date_time_created[1].split('.')[0]
+        const date_time_created = get_date_time(obj.date_created)
 
         var imgElmRe;
         if (obj.parent_serialized.img != null) {
@@ -134,11 +137,11 @@ function getRetweetElm(obj) {
                 <div class='container'>
                     <div class='col-md-8 col-sm-12 mx-auto border rounded py-3 mb-4'>
                         <div>
-                               <small><a href="/accounts/profile/${obj.parent_serialized.owner_id}">${obj.parent_serialized.owner_name}</a></small>
 
-                                <span style="margin-left: 60%">
-                                    <small>${date_created}  ${time_created}</small>
-                                </span>
+                               <small><a href="/accounts/profile/${obj.owner_id}">${obj.owner_name}</a></small>
+                                <!---<span style="float: right; margin: 0 1.5%; width: 30%;height: 30%; flex: auto">
+                                    <small>${date_time_created}</small>
+                                </span> -->
                         </div>
                         <div class="container retwtcls">
                             ${obj.parent_serialized.content}
@@ -345,9 +348,7 @@ function format_tweet(obj){
     const btnElm = gen_btnElm(obj)
     const imgElm = get_imgElm(obj)
     
-    let date_time_created = obj.date_created
-    const myDateTime = new Date(date_time_created)
-    date_time_created = myDateTime.toLocaleString()
+    const date_time_created = get_date_time(obj.date_created)
 
     return `                    
                     <div class='container'>
