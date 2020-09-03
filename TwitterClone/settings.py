@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'tweets.apps.TweetsConfig',
     'rest_framework.apps.RestFrameworkConfig',
+
+    'rest_framework_jwt'
 ]
 
 MIDDLEWARE = [
@@ -140,15 +142,15 @@ DEFAULT_RENDERER_CLASSES = [
 ]
 
 DEFAULT_AUTHENTICATION_CLASSES = [
+    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     'rest_framework.authentication.SessionAuthentication'
 ]
 if DEBUG:
     DEFAULT_RENDERER_CLASSES += [
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
-    # DEFAULT_AUTHENTICATION_CLASSES += [
-    #     'tweetme2.rest_api.dev.DevAuthentication'
-    # ]
+
+
 REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES,

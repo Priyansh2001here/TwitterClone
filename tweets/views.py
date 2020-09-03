@@ -32,19 +32,6 @@ def tweet_create_api(request):
         return Response(data=serialized_data, status=200)
     return Response(status=400)
 
-
-@login_required()
-def create(request, *args, **kwargs):
-    if request.method == 'POST':
-        tweet = TweetForm(request.POST, request.FILES)
-        if tweet.is_valid():
-            obj = tweet.save(commit=False)
-            obj.owner = request.user
-            obj.save()
-            return redirect("/")
-    return redirect("/")
-
-
 @api_view(['POST', 'GET'])
 @permission_classes([IsAuthenticated])
 def action_serialize(request, *args, **kwargs):
