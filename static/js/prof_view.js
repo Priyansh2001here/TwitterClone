@@ -1,5 +1,5 @@
 function generate_f_unf_btn(follow_status, usr_id) {
-    if (usrStat !== 401) {
+    if (usrStat !== 403) {
         if (follow_status == null) {
             return "<div></div>"}
         else if (follow_status === true) {

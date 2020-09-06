@@ -159,7 +159,7 @@ function getRetweetElm(obj) {
 }
 
 function retweetBtn(tweetID, retweet_count) {
-    if (usrStat !== 401 ) {
+    if (usrStat !== 403 ) {
         if (!retweet_count){
             retweet_count = 0
         }
@@ -183,7 +183,7 @@ function button_generator(tweet_id, likes_count, to_do) {
     if (!likes_count){
         likes_count = 0
     }
-    if (usrStat === 401){
+    if (usrStat === 403){
         return (`
                  <div>
                     <button class="btn btn-primary" onclick="$('#modalLRForm').modal('show')">Login</button>
@@ -293,7 +293,7 @@ function get_is_retweet(obj){
 function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false) {
     if (!all && load_feed && pk===null) {
 
-        if (usrStat !== 401 ){
+        if (usrStat !== 403 ){
         document.getElementById('tweets-here').innerHTML = 'Loading......'
         document.getElementById('feed-global').innerHTML = '<a class="nav-link" style="cursor: pointer" onclick="load_tweets(false, null, false)">Global<span class="sr-only">(current)</span></a>'
 
