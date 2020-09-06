@@ -19,7 +19,8 @@ from django.urls import path, include
 from . import settings
 from django.conf.urls.static import static
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
-
+from rest_framework_jwt.utils import jwt_decode_handler, jwt_get_username_from_payload_handler
+from chatApp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,5 +31,7 @@ urlpatterns = [
     url(r'^api-token-verify/', verify_jwt_token),
     url(r'^api-token-refresh/', refresh_jwt_token),
 
+
+    path('socket', views.check)
 ]
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

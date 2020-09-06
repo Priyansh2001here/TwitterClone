@@ -3,7 +3,6 @@ from django.shortcuts import render, \
     get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Tweet, Like
-from .forms import TweetForm
 from django.contrib.auth.models import User
 from .serializer import TweetSerializer, \
     ActionSerializer, \
@@ -31,6 +30,7 @@ def tweet_create_api(request):
         serialized_data = TweetSerializer(obj, context={'request': request}).data
         return Response(data=serialized_data, status=200)
     return Response(status=400)
+
 
 @api_view(['POST', 'GET'])
 @permission_classes([IsAuthenticated])

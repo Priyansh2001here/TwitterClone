@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,8 +42,8 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'tweets.apps.TweetsConfig',
     'rest_framework.apps.RestFrameworkConfig',
-
-    'rest_framework_jwt'
+    'chatApp.apps.ChatappConfig',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -142,7 +143,6 @@ DEFAULT_RENDERER_CLASSES = [
 ]
 
 DEFAULT_AUTHENTICATION_CLASSES = [
-    'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     'rest_framework.authentication.SessionAuthentication'
 ]
 if DEBUG:
@@ -152,7 +152,6 @@ if DEBUG:
 
 
 REST_FRAMEWORK = {
-
     'DEFAULT_AUTHENTICATION_CLASSES': DEFAULT_AUTHENTICATION_CLASSES,
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
 }

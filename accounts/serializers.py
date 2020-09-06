@@ -54,6 +54,7 @@ class ProfileSerializer(ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     pswd = serializers.CharField()
+    token = serializers.CharField(max_length=255, read_only=True)
 
 
 class UserCreateSerializer(serializers.Serializer):

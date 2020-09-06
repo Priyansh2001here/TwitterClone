@@ -19,6 +19,11 @@ from .serializers import \
     UserCreateSerializer, \
     ProfileUpdateSerializer
 
+from rest_framework_jwt.settings import api_settings
+
+JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
+JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
+
 
 def validate_password(password: str) -> bool:
     return len(password) > 8 and \
@@ -92,7 +97,6 @@ def user_regis_api(request):
                                        )
 
         usr.save()
-        auth.login(request, usr)
         return Response(status=200)
 
     return Response({'message': 'something is not ok try again!!'})
