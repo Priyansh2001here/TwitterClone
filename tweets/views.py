@@ -7,11 +7,12 @@ from django.contrib.auth.models import User
 from .serializer import TweetSerializer, \
     ActionSerializer, \
     TweetCreateSerializer
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Q
-
+from rest_framework.authentication import SessionAuthentication
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
 def home(request, *args, **kwargs):
     return render(request, 'home.html', {
@@ -20,8 +21,10 @@ def home(request, *args, **kwargs):
 
 
 @api_view(['POST'])
+# @authentication_classes([JSONWebTokenAuthentication])
 @permission_classes([IsAuthenticated])
 def tweet_create_api(request):
+    print(request.headers)
     serialized = TweetCreateSerializer(data=request.data)
     if serialized.is_valid():
         obj = serialized.save()

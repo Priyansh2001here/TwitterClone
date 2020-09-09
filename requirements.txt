@@ -1,4 +1,0 @@
-Django==3.1
-djangorestframework==3.11.1
-
-djangorestframework-jwt~=1.11.0

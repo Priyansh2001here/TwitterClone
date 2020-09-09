@@ -30,7 +30,7 @@ async function register_form_submit(event) {
         },
         body: myFormData
     }
-    let resp = await fetch('/accounts/usr_regis_api', options)
+    let resp = await fetch('/accounts/api/register', options)
     if (resp.status === 200){
         location.reload()
     }else if(resp.status === 413) {

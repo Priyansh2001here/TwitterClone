@@ -1,8 +1,8 @@
 
-var userDetails;
+let userDetails;
 
-var wrapper;
-var tweet_create_form = document.getElementById('tweet-create-form')
+let wrapper;
+let tweet_create_form = document.getElementById('tweet-create-form')
 tweet_create_form.addEventListener('submit', create_tweet)
 function search(){
     const search_term = document.getElementById('search-field').value
@@ -11,7 +11,6 @@ function search(){
         document.getElementById('tweets-here').style.display = 'block'
         document.getElementById('search-results').style.display = 'none'
         return
-        // document.getElementById('search-results')
     }
 
     const url = `/accounts/api/search/${search_term}`
@@ -23,7 +22,7 @@ function search(){
                 document.getElementById('tweets-here').style.display = 'none'
                 document.getElementById('search-results').style.display = 'block'
                 document.getElementById('search-results').innerHTML = ""
-                for (var i = 0; i< results.length; i++) {
+                for (let i = 0; i< results.length; i++) {
                     const url = `/accounts/profile/${results[i][1]}`
                     document.getElementById('search-results').innerHTML += `
                         <div><a href=${url}>
@@ -48,9 +47,9 @@ function get_date_time(date_time_created){
 
 async function create_tweet(event) {
     event.preventDefault()
-    var myForm = event.target
-    var myFormdata = new FormData(myForm)
-    const url = '/tweet_create_api'
+    let myForm = event.target
+    let myFormdata = new FormData(myForm)
+    const url = '/api/create'
     const options = {
         method : 'POST',
         headers: {
@@ -95,11 +94,11 @@ async function stack(all=true, pk=null, load_feed=true, load_profile_bool=false)
     }
 }
 
-var loadFile = function (event) {
-    var image = document.getElementById('output');
+let loadFile = function (event) {
+    let image = document.getElementById('output');
     image.src = URL.createObjectURL(event.target.files[0]);
     image.style.display = 'block'
-    var reset_Btn = document.getElementById("image-reset");
+    let reset_Btn = document.getElementById("image-reset");
     reset_Btn.innerHTML = `<button type="button" onclick="reset_img()" class="btn btn-danger">Remove Image</button>`
     reset_Btn.style.display = 'block'
 };
@@ -122,7 +121,7 @@ function getRetweetElm(obj) {
 
         const date_time_created = get_date_time(obj.date_created)
 
-        var imgElmRe;
+        let imgElmRe;
         if (obj.parent_serialized.img != null) {
             imgElmRe = (`
                     <div>
@@ -179,7 +178,7 @@ function retweetBtn(tweetID, retweet_count) {
 }
 
 function button_generator(tweet_id, likes_count, to_do) {
-    var new_btn;
+    let new_btn;
     if (!likes_count){
         likes_count = 0
     }
@@ -224,7 +223,7 @@ async function action(tweet_id, likes_count, action){
                             <button class="btn" id=${tweet_id}>.....</button>
                         </div>
                         `
-    var tempBtn
+    let tempBtn
     const csrftoken = getCookie('csrftoken')
     const options = {
         method : 'POST',
@@ -245,19 +244,19 @@ async function action(tweet_id, likes_count, action){
     {
         likes_count+=1
         tempBtn = button_generator(tweet_id, likes_count, 'unlike')
-        var element = document.getElementById("tweet-" + tweet_id)
+        let element = document.getElementById("tweet-" + tweet_id)
         element.innerHTML = tempBtn
     }else if (server_response === "like deleted")
     {
         likes_count-=1
         tempBtn = button_generator(tweet_id, likes_count, 'like')
-        var element = document.getElementById("tweet-" + tweet_id)
+        let element = document.getElementById("tweet-" + tweet_id)
         element.innerHTML = tempBtn
     }
 }
 
 async function get_user() {
-    const url = "/accounts/usrinfo"
+    const url = "/accounts/api/userinfo"
     let resp1 = await fetch(url);
     userDetails = resp1
     usrStat = resp1.status
@@ -299,7 +298,7 @@ function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false
 
         }
         
-        const url = "/tweets_api"
+        const url = "/api/tweets"
         fetch(url)
             .then((resp) => resp.json())
             .then(function get_data(data) {
@@ -319,12 +318,10 @@ function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false
     }
     else if (!load_feed && !all){
 
-                const url = "/tweets_api/global"
+                const url = "/api/tweets/global"
         fetch(url)
             .then((resp) => resp.json())
             .then(function get_data(data) {
-
-
                 wrapper.innerHTML = ""
                 for (let i = 0; i < data.length; i++) {
 
@@ -379,11 +376,11 @@ function format_tweet(obj){
 }
 
 function getCookie(name) {
-    var cookieValue = null;
+    let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;

@@ -16,7 +16,7 @@ async function login_form_submit(event) {
         },
         body: myFormData
     }
-    let resp1 = await fetch(`/accounts/login_api`, options)
+    let resp1 = await fetch(`/accounts/api/login`, options)
     if (resp1.status === 401){
         alert('invalid credentials')
     }else if (resp1.status === 400){

@@ -41,7 +41,7 @@ def logout(request, *args, **kwargs):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def userinf(request):
+def userinfo(request):
     serialized = UserSerializer(request.user)
     return Response(serialized.data)
 
@@ -61,8 +61,10 @@ def login_api(request):
                                  password=serialized.data.get('pswd'))
         if not user:
             return Response(status=401)
+        payload = JWT_PAYLOAD_HANDLER(user)
+        token = JWT_ENCODE_HANDLER(payload)
         auth.login(request, user)
-        return Response(status=200)
+        return Response(data={'token': token}, status=200)
     return Response(status=400)
 
 
@@ -83,7 +85,7 @@ def user_regis_api(request):
             return Response({'message': 'user already exists'}, status=409)
         if password1 != password2:
             return Response(data={'message': 'passwords donot match'}, status=409)
-        if validate_password(password1):
+        if not validate_password(password1):
             return Response(data={'message': 'password must be greater than 8 and must contain digits and alphabets'},
                             status=409)
         if len(username) > 25:
