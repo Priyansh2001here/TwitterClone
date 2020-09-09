@@ -24,7 +24,7 @@ io.on('connection', socket => {
     const auth_token = "JWT " + jwt
     socket.on('send-chat-message', (data) => {
 
-        socket.broadcast.emit(data)
+        socket.broadcast.emit('chat-message', data)
 
         const myData = JSON.stringify(
             {

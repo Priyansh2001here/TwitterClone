@@ -45,6 +45,8 @@
   </style>
 </head>
 <body>
+<h1>Global Chat Room</h1>
+<br>
   <div id="message-container"></div>
   <form id="send-container">
     <input type="text" id="message-input">
@@ -66,9 +68,12 @@ messageForm.addEventListener('submit', e => {
   e.preventDefault()
     const message = e.target.elements[0].value
     console.log(message)
-  {#const  = messageInput.value#}
-  {#  const jwt = localStorage.jwt#}
   socket.emit('send-chat-message', message)
+})
+
+socket.on('chat-message', (data) => {
+    console.log(data)
+    document.getElementById('message-container').innerHTML+='<div>'+data+'</div>'
 })
 
 </script>
