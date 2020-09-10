@@ -31,7 +31,6 @@ urlpatterns = [
     url(r'^api-token-verify/', verify_jwt_token),
     url(r'^api-token-refresh/', refresh_jwt_token),
 
-    path('chat', TemplateView.as_view(template_name='chat.html')),
-    path('chat/index', index)
+    path('chat/', include('chatApp.urls'))
 ]
 urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

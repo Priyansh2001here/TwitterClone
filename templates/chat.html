@@ -2,79 +2,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Chat App</title>
-  <script src="{% static 'js/socket.io.js' %}"></script>
-  <style>
-    body {
-      padding: 0;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat App</title>
+    <script src="{% static 'js/socket.io.js' %}"></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
 
-    #message-container {
-      width: 80%;
-      max-width: 1200px;
-    }
+        #message-container {
+            width: 80%;
+            max-width: 1200px;
+        }
 
-    #message-container div {
-      background-color: #CCC;
-      padding: 5px;
-    }
+        #message-container div {
+            background-color: #CCC;
+            padding: 5px;
+        }
 
-    #message-container div:nth-child(2n) {
-      background-color: #FFF;
-    }
+        #message-container div:nth-child(2n) {
+            background-color: #FFF;
+        }
 
-    #send-container {
-      position: fixed;
-      padding-bottom: 30px;
-      bottom: 0;
-      background-color: white;
-      max-width: 1200px;
-      width: 80%;
-      display: flex;
-    }
+        #send-container {
+            position: fixed;
+            padding-bottom: 30px;
+            bottom: 0;
+            background-color: white;
+            max-width: 1200px;
+            width: 80%;
+            display: flex;
+        }
 
-    #message-input {
-      flex-grow: 1;
-    }
-  </style>
+        #message-input {
+            flex-grow: 1;
+        }
+    </style>
 </head>
 <body>
 <h1>Global Chat Room</h1>
 <br>
-  <div id="message-container"></div>
-  <form id="send-container">
-    <input type="text" id="message-input">
+<div id="message-container"></div>
+<form id="send-container">
+    <input type="text" id="message-input" required>
     <button type="submit" id="send-button">Send</button>
-  </form>
+</form>
 </body>
 <script>
-const socket = io('http://localhost:3000', {
-    transportOptions: {
-        polling: {
-            extraHeaders: {
-                Authorization: localStorage.jwt
+
+    const host = window.location.host
+    const hostname = window.location.hostname
+
+    const socket = io(`http://${hostname}:3000`, {
+        transportOptions: {
+            polling: {
+                extraHeaders: {
+                    Authorization: localStorage.jwt
+                }
             }
         }
-    }
-})
-const messageForm = document.getElementById('send-container')
-messageForm.addEventListener('submit', e => {
-  e.preventDefault()
-    const message = e.target.elements[0].value
-    console.log(message)
-  socket.emit('send-chat-message', message)
-})
+    })
 
-socket.on('chat-message', (data) => {
-    console.log(data)
-    document.getElementById('message-container').innerHTML+='<div>'+data+'</div>'
-})
+    const messageForm = document.getElementById('send-container')
+    messageForm.addEventListener('submit', e => {
+        e.preventDefault()
+        const message = e.target.elements[0].value
+        console.log(message)
+        socket.emit('send-chat-message', message)
+        document.getElementById('message-container').innerHTML+= 'you -> ' + message
+    })
+
+    socket.on('chat-message', (data) => {
+        const {message, username, id} = data
+        const userLink = `http://${host}/accounts/profile/${id}`
+        const userDiv = `<div><a href="${userLink}">${username}</a></div>`
+        document.getElementById('message-container').innerHTML+='<div>' + userDiv + ' -> '  + message + '</div>'
+    })
 
 </script>
 </html>

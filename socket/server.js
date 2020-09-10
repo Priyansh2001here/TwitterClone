@@ -1,7 +1,15 @@
+const djangoPORT = '8000'
+const host = '127.0.0.1'
+
+
 const express = require('express')
 let app = express()
-let server = app.listen(3000)
+let server = app.listen(3000, host)
 const fetch = require('node-fetch')
+const cors = require('cors')
+app.use(cors())
+
+
 const io = require("socket.io")(server, {
     handlePreflightRequest: (req, res) => {
         const headers = {
@@ -14,8 +22,35 @@ const io = require("socket.io")(server, {
     }
 })
 
-const cors = require('cors')
-app.use(cors())
+
+const sendmessage = async (socket, data, auth_token) => {
+
+    const myData = JSON.stringify(
+        {
+            'message': data
+        }
+    )
+
+    const options = {
+        method: 'POST',
+        headers: {
+            Authorization: auth_token,
+            'Content-Type': 'application/json'
+        },
+        body: myData
+    }
+
+    let resp = await fetch(`http://${host}:${djangoPORT}/chat/message`, options)
+    resp = await resp.json()
+
+    const userMessage = {
+        message: data,
+        username: resp.username,
+        id: resp.id
+    }
+
+    socket.broadcast.emit('chat-message', userMessage)
+}
 
 
 io.on('connection', socket => {
@@ -24,27 +59,9 @@ io.on('connection', socket => {
     const auth_token = "JWT " + jwt
     socket.on('send-chat-message', (data) => {
 
-        socket.broadcast.emit('chat-message', data)
+        sendmessage(socket, data, auth_token)
 
-        const myData = JSON.stringify(
-            {
-                'message': data
-            }
-        )
-
-
-        const options = {
-            method: 'POST',
-            headers: {
-                Authorization: auth_token,
-                'Content-Type': 'application/json'
-            },
-            body: myData
-        }
-
-        console.log(myData)
-
-        fetch('http://127.0.0.1:8000/chat/index', options)
+        console.log(data)
 
     })
 })
