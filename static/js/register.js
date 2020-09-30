@@ -1,16 +1,13 @@
-
-var regis_form = document.getElementById('regis-form');
-regis_form.addEventListener('submit', register_form_submit);
-
+$('#regis-form').submit(register_form_submit)
 
 async function register_form_submit(event) {
     event.preventDefault()
     var formElement = event.target
     const myFormData = new FormData(formElement)
 
-    const usrname = document.getElementById('usrname').value
-    const pswd1 = document.getElementById('pswd1').value
-    const pswd2 = document.getElementById('pswd2').value
+    const usrname = $('#usrname').val()
+    const pswd1 = $('#pswd1').val()
+    const pswd2 = $('#pswd2').val()
 
     if (usrname.length > 25){
         alert('length of username must be less than 25')

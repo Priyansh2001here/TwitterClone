@@ -13,7 +13,7 @@ function generate_f_unf_btn(follow_status, usr_id) {
 
 async function profile_action(action, usr_id){
 
-    document.getElementById("f-unf-btn-"+usr_id).innerHTML = `<div><button class="btn"></button></div>`
+    $("#f-unf-btn-"+usr_id).html(`<div><button class="btn"></button></div>`)
     const url = '/accounts/profile/action'
     const csrf_token = getCookie('csrftoken')
     options = {
@@ -31,9 +31,9 @@ async function profile_action(action, usr_id){
     let resp = await resp1.json()
 
     if ((resp1.status === 200) && (action === "follow")){
-        document.getElementById("f-unf-btn-"+usr_id).innerHTML = generate_f_unf_btn(true, usr_id)
+        $("#f-unf-btn-"+usr_id).html(generate_f_unf_btn(true, usr_id))
     } else if (resp1.status === 200 && resp.message === "you are no longer a follower"){
-        document.getElementById("f-unf-btn-"+usr_id).innerHTML = generate_f_unf_btn(false, usr_id)
+        $("#f-unf-btn-"+usr_id).html(generate_f_unf_btn(false, usr_id))
     } else {
         alert(resp.message)
     }
@@ -52,28 +52,28 @@ function load_profile(pk=null) {
         .then(function get_data(data) {
 
                 const all_tweets = data.all_tweets
-                wrapper.innerHTML = ""
+                wrapper.html("")
                 for (let i = 0; i < all_tweets.length; i++) {
                     const item = format_tweet(all_tweets[i])
-                    wrapper.innerHTML += item
+                    wrapper.append(item)
                 }
 
-                document.getElementById('usr-bio').innerText = data.bio
+                $('#usr-bio').html(data.bio)
                 const banner_img_url = data.banner_img
                 const prof_img_url = data.prof_img
 
                 if (banner_img_url) {
-                    document.getElementById('output-banner-img').src = banner_img_url
+                    $('#output-banner-img').attr('src', banner_img_url)
                 }
                 if (prof_img_url) {
-                    document.getElementById('output-prof-img').src = prof_img_url
+                    $('#output-prof-img').attr('src', prof_img_url)
                 }
-                document.getElementById('btn-here').innerHTML = generate_f_unf_btn(data.is_following ,pk)
+                $('#btn-here').html(generate_f_unf_btn(data.is_following ,pk))
 
-                document.getElementById('first_name').innerText = data.prof_user.first_name
-                document.getElementById('last_name').innerText = data.prof_user.last_name
-                document.getElementById('followers-count').innerText = data.followers + " followers"
-                document.getElementById('following-count').innerText = data.following + " following"
+                $('#first_name').text(data.prof_user.first_name)
+                $('#last_name').text(data.prof_user.last_name)
+                $('#followers-count').text(data.followers + " followers")
+                $('#following-count').text(data.following + " following")
             }
         )
 }

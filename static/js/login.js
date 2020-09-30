@@ -1,7 +1,4 @@
-
-var login_form = document.getElementById('login-form');
-login_form.addEventListener('submit', login_form_submit);
-
+$('#login-form').submit(login_form_submit)
 
 async function login_form_submit(event) {
     event.preventDefault()

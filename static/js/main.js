@@ -2,14 +2,15 @@
 let userDetails;
 
 let wrapper;
-let tweet_create_form = document.getElementById('tweet-create-form')
-tweet_create_form.addEventListener('submit', create_tweet)
+
+$('#tweet-create-form').submit(create_tweet)
+
 function search(){
-    const search_term = document.getElementById('search-field').value
+    const search_term = $('#search-field').val()
 
     if (search_term === ""){
-        document.getElementById('tweets-here').style.display = 'block'
-        document.getElementById('search-results').style.display = 'none'
+        $('#tweets-here').css('display', 'block')
+        $('#search-results').css('display', 'none')
         return
     }
 
@@ -17,27 +18,30 @@ function search(){
     fetch(url)
         .then((resp) => resp.json())
         .then(function (data) {
-            const results = data.results
-            if (results){
-                document.getElementById('tweets-here').style.display = 'none'
-                document.getElementById('search-results').style.display = 'block'
-                document.getElementById('search-results').innerHTML = ""
-                for (let i = 0; i< results.length; i++) {
-                    const url = `/accounts/profile/${results[i][1]}`
-                    document.getElementById('search-results').innerHTML += `
+                const results = data.results
+                if (results){
+                    $('#tweets-here').style.display = 'none'
+
+                    $('#search-results')
+                        .css('display', 'block')
+                        .html("")
+
+                    for (let i = 0; i< results.length; i++) {
+                        const url = `/accounts/profile/${results[i][1]}`
+                        $('#search-results').append( `
                         <div><a href=${url}>
                             <div>${results[i][0]}</div>
                             <hr>
                             <br>
                         </div>        
-                        `
+                        `)
+                    }
+
+                } else {
+                    $('#search-results').html('No Search Results')
                 }
-
-            } else {
-                document.getElementById('search-results').innerHTML = 'No Search Results'
-
             }
-        })
+        )
 }
 
 function get_date_time(date_time_created){
@@ -53,14 +57,15 @@ async function create_tweet(event) {
     const options = {
         method : 'POST',
         headers: {
-                "X-CSRFToken": getCookie('csrftoken')
+            "X-CSRFToken": getCookie('csrftoken')
         },
         body: myFormdata
     }
     let resp = await fetch(url, options)
     if (resp.status === 200) {
         resp = await resp.json()
-        let tweets_here = document.getElementById('tweets-here').innerHTML
+        let tweets_here_elm = $('#tweets-here')
+        let tweets_here = tweets_here_elm.html()
 
         let retweetElm = getRetweetElm(resp)
         const btnElm = gen_btnElm(resp)
@@ -68,21 +73,20 @@ async function create_tweet(event) {
         const item = format_tweet(resp, imgElm, retweetElm, btnElm)
 
         tweets_here = item + tweets_here
-        document.getElementById('tweets-here').innerHTML = tweets_here
+        tweets_here_elm.html(tweets_here)
         myForm.reset()
-        document.getElementById('output').style.display = 'none'
-        document.getElementById('image-reset').style.display = 'none'
+        $('#output').css('display', 'none')
+        $('#image-reset').css('display', 'none')
 
     }else if (resp.status === 413){
         alert("image too large to upload")
-
     }else {
-        alert("error occured")
+        alert("error occurred")
     }
 }
 
 async function stack(all=true, pk=null, load_feed=true, load_profile_bool=false){
-    wrapper = document.getElementById("tweets-here");
+    wrapper = $("#tweets-here");
     await get_user()
     if (all) {
         await load_tweets();
@@ -98,10 +102,11 @@ let loadFile = function (event) {
     let image = document.getElementById('output');
     image.src = URL.createObjectURL(event.target.files[0]);
     image.style.display = 'block'
-    let reset_Btn = document.getElementById("image-reset");
-    reset_Btn.innerHTML = `<button type="button" onclick="reset_img()" class="btn btn-danger">Remove Image</button>`
-    reset_Btn.style.display = 'block'
+    let reset_Btn = $("#image-reset");
+    reset_Btn.html(`<button type="button" onclick="reset_img()" class="btn btn-danger">Remove Image</button>`)
+    reset_Btn.css('display', 'block')
 };
+
 
 function reset_img() {
     const form_elements = document.getElementById('tweet-create-form').elements;
@@ -218,11 +223,11 @@ function if_liked(tweet_obj) {
 }
 
 async function action(tweet_id, likes_count, action){
-    document.getElementById("tweet-" + tweet_id).innerHTML = `
+    $("#tweet" + tweet_id).html(`
                         <div id="tweet-${tweet_id}">
                             <button class="btn" id=${tweet_id}>.....</button>
                         </div>
-                        `
+                        `)
     let tempBtn
     const csrftoken = getCookie('csrftoken')
     const options = {
@@ -244,14 +249,14 @@ async function action(tweet_id, likes_count, action){
     {
         likes_count+=1
         tempBtn = button_generator(tweet_id, likes_count, 'unlike')
-        let element = document.getElementById("tweet-" + tweet_id)
-        element.innerHTML = tempBtn
+        let element = $("#tweet-" + tweet_id)
+        element.html(tempBtn)
     }else if (server_response === "like deleted")
     {
         likes_count-=1
         tempBtn = button_generator(tweet_id, likes_count, 'like')
-        let element = document.getElementById("tweet-" + tweet_id)
-        element.innerHTML = tempBtn
+        let element = $("#tweet-" + tweet_id)
+        element.html(tempBtn)
     }
 }
 
@@ -293,21 +298,20 @@ function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false
     if (!all && load_feed && pk===null) {
 
         if (usrStat !== 403 ){
-        document.getElementById('tweets-here').innerHTML = 'Loading......'
-        document.getElementById('feed-global').innerHTML = '<a class="nav-link" style="cursor: pointer" onclick="load_tweets(false, null, false)">Global<span class="sr-only">(current)</span></a>'
-
+            $('#tweets-here').html('Loading......')
+            $('#feed-global').html('<a class="nav-link" style="cursor: pointer" onclick="load_tweets(false, null, false)">Global<span class="sr-only">(current)</span></a>')
         }
-        
+
         const url = "/api/tweets"
         fetch(url)
             .then((resp) => resp.json())
             .then(function get_data(data) {
 
 
-                wrapper.innerHTML = ""
+                wrapper.html("")
                 for (let i = 0; i < data.length; i++) {
                     const item = format_tweet(data[i])
-                    wrapper.innerHTML += item
+                    wrapper.append(item)
                 }
             })
 
@@ -318,25 +322,24 @@ function load_tweets(all=false, pk=null, load_feed=true, load_profile_bool=false
     }
     else if (!load_feed && !all){
 
-                const url = "/api/tweets/global"
+        const url = "/api/tweets/global"
         fetch(url)
             .then((resp) => resp.json())
             .then(function get_data(data) {
-                wrapper.innerHTML = ""
-                for (let i = 0; i < data.length; i++) {
+                    wrapper.html("")
+                    for (let i = 0; i < data.length; i++) {
 
-                    const item = format_tweet(data[i])
-                    wrapper.innerHTML += item
+                        const item = format_tweet(data[i])
+                        wrapper.append(item)
+                    }
                 }
-            }
 
             )
 
-        document.getElementById('tweets-here').innerHTML = 'Loading......'
-        document.getElementById('feed-global').innerHTML = '<a class="nav-link" style="cursor: pointer" onclick="load_tweets(false, null, true, true)">Feed<span class="sr-only">(current)</span></a>'
-
+        $('#tweets-here').html('Loading......')
+        $('#feed-global').html('<a class="nav-link" style="cursor: pointer" onclick="load_tweets(false, null, true, true)">Feed<span class="sr-only">(current)</span></a>')
     }
-                                    
+
 }
 
 function format_tweet(obj){
@@ -344,7 +347,7 @@ function format_tweet(obj){
     let retweetElm = getRetweetElm(obj)
     const btnElm = gen_btnElm(obj)
     const imgElm = get_imgElm(obj)
-    
+
     const date_time_created = get_date_time(obj.date_created)
 
     return `                    

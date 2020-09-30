@@ -74,14 +74,14 @@
         const message = e.target.elements[0].value
         console.log(message)
         socket.emit('send-chat-message', message)
-        document.getElementById('message-container').innerHTML+= 'you -> ' + message
+        document.getElementById('message-container').innerHTML+= 'you -> ' + String(message)
     })
 
     socket.on('chat-message', (data) => {
         const {message, username, id} = data
         const userLink = `http://${host}/accounts/profile/${id}`
-        const userDiv = `<div><a href="${userLink}">${username}</a></div>`
-        document.getElementById('message-container').innerHTML+='<div>' + userDiv + ' -> '  + message + '</div>'
+        const userDiv = String(`<div><a href="${userLink}">${username}</a></div>`)
+        document.getElementById('message-container').innerHTML+='<div>' + userDiv + ' -> '  + String(message) + '</div>'
     })
 
 </script>

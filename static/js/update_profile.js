@@ -1,78 +1,78 @@
-var remove_banner = 0, remove_avatar = 0, change_banner=0, change_avatar=0
+let remove_banner = 0, remove_avatar = 0, change_banner=0, change_avatar=0
 
 function rem_av() {
-    document.getElementById('remove-prof-img').style.display = 'none'
-    document.getElementById('output-prof-img').src = "https://www.w3schools.com/w3images/avatar2.png"
-    document.getElementById('prof-img').value = ""
+    $('#remove-prof-img').css('display', 'none')
+    $('#output-prof-img').attr('src', "https://www.w3schools.com/w3images/avatar2.png")
+    $('#prof-img').val("")
     remove_avatar = 1
 }
 
 function rem_ban() {
     remove_banner = 1
-    document.getElementById('remove-banner-img').style.display = 'none'
-    document.getElementById('output-banner-img').src = "https://adhyatmik.in/wp-content/uploads/2019/02/Background-Header-1.jpg"
-    document.getElementById('banner-img').value = ""
+    $('#remove-banner-img').css('display', 'none')
+    $('#output-banner-img').attr('src', "https://adhyatmik.in/wp-content/uploads/2019/02/Background-Header-1.jpg")
+    $('#banner-img').val("")
 }
 
 async function getProfDetails() {
     let resp1 = await fetch('/accounts/prof_update')
     resp1 = await resp1.json()
 
-    document.getElementById('usr-bio').innerText = resp1.bio
+    $('#usr-bio').text(resp1.bio)
 
     if (resp1.prof_img) {
-        document.getElementById('remove-prof-img').style.display = 'inline'
-        document.getElementById('output-prof-img').style.display = 'block'
-        document.getElementById('output-prof-img').src = resp1.prof_img
+        $('#remove-prof-img').css('display', 'inline')
+
+        $('#output-prof-img')
+            .css('display', 'block')
+            .attr('src', resp1.prof_img)
     }
     if (resp1.banner_img) {
-        document.getElementById('remove-banner-img').style.display = 'inline'
-        document.getElementById('output-banner-img').style.display = 'block'
-        document.getElementById('output-banner-img').src = resp1.banner_img
+        $('#remove-banner-img').css('display', 'inline')
+        $('#output-banner-img')
+            .css('display', 'block')
+            .attr('src', resp1.banner_img)
     }
 
 }
 
 function load_av() {
-    var prof_img = document.getElementById('prof-img').files[0]
-    document.getElementById('output-prof-img').src = URL.createObjectURL(prof_img)
-    document.getElementById('output-prof-img').style.display = 'block'
-    document.getElementById('remove-prof-img').style.display = 'inline'
+    let prof_img = document.getElementById('prof-img').files[0]
+    $('#output-prof-img')
+        .attr('src', URL.createObjectURL(prof_img))
+        .css('display', 'block')
+        .css('display', 'inline')
     change_avatar = 1
 }
 
 function load_banner() {
-    var banner_img = document.getElementById('banner-img').files[0]
-    document.getElementById('output-banner-img').src = URL.createObjectURL(banner_img)
-    document.getElementById('output-banner-img').style.display = 'block'
-    document.getElementById('remove-banner-img').style.display = 'inline'
+    let banner_img = document.getElementById('banner-img').files[0]
+    $('#output-banner-img')
+        .attr('src', URL.createObjectURL(banner_img))
+        .css('display', 'block')
+        .css('display', 'inline')
     change_banner = 1
 }
 
 getProfDetails()
 getUsrDetails()
 
-var formdata = new FormData()
-var form = document.getElementById('my-frm')
-form.addEventListener('submit', submit_from)
+let formdata = new FormData()
+$('#my-frm').submit(submit_from)
 
 async function getUsrDetails() {
     console.log('triggered')
-    let resp1 = await fetch('/accounts/usrinfo')
+    let resp1 = await fetch('/accounts/api/userinfo')
     resp1 = await resp1.json()
-    document.getElementById('first_name').value = resp1.first_name
-    document.getElementById('last_name').value = resp1.last_name
-
+    $('#first_name').val(resp1.first_name)
+    $('#last_name').val(resp1.last_name)
 }
 
 async function submit_from(event) {
     event.preventDefault()
-
-    const myForm = event.target
-
     const btn = document.getElementById('prof-update-btn')
-    var prof_img = document.getElementById('prof-img').files[0]
-    var banner_img = document.getElementById('banner-img').files[0]
+    let prof_img = document.getElementById('prof-img').files[0]
+    let banner_img = document.getElementById('banner-img').files[0]
 
     btn.disabled = true
     if (remove_avatar === 1) {
@@ -108,7 +108,7 @@ async function submit_from(event) {
     }else if (resp.status === 413){
         alert("image too large to upload")
     } else {
-        alert('error occured')
+        alert('error occurred')
     }
     btn.disabled = false
 }
