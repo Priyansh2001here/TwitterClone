@@ -7,7 +7,7 @@ verify_ssl = true
 
 [packages]
 djangorestframework = "==3.11.1"
-Django = "==3.1"
+Django = "==3.1.6"
 django-cors-headers = "*"
 psycopg2 = "*"
 pillow = "*"
